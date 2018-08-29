@@ -81,7 +81,7 @@ RUN set -xe \
 # Create source dolder
     && mkdir -p /usr/src \
 # Install exif gd intl mysql mysqli pdo_mysql sockets mcrypt
-    && docker-php-ext-install exif gd intl mysql mysqli pdo_mysql sockets \
+    && docker-php-ext-install exif gd intl mysql mysqli pdo_mysql sockets mcrypt \
 # 
 # Fetch pecl
     && curl -fSL http://pecl.php.net/get/igbinary-$IGBINARY_VER.tgz -o igbinary.tgz \
