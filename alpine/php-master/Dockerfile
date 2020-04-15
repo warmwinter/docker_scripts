@@ -92,7 +92,7 @@ RUN set -eux; \
 	mkdir -p /usr/src; \
 	cd /usr/src; \
 	\
-	curl -fsSL --progress-bar -o php.tar.gz "$PHP_URL"; \
+	curl -fSL --progress-bar -o php.tar.gz "$PHP_URL"; \
 	\
 	if [ -n "$PHP_SHA256" ]; then \
 		echo "$PHP_SHA256 *php.tar.gz" | sha256sum -c -; \
