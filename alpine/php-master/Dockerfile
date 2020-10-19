@@ -15,7 +15,7 @@ RUN echo ${ALPINE_VERSION}"\n"
 ENV ALPINE_VERSION 3.12
 ENV IGBINARY_VER 3.1.6
 ENV REDIS_VER 5.3.2RC2
-ENV XDEBUG_VER 2.9.8
+ENV XDEBUG_VER 3.0.0beta1
 ENV SWOOLE_VER 4.5.5
 ENV STOMP_VER 2.0.2
 
@@ -313,12 +313,12 @@ RUN set -eux; \
     && rm -rf /usr/src/swoole-$SWOOLE_VER \
 #
 # install stomp
-    && cd /usr/src/stomp-$STOMP_VER \
-    && phpize \
-    && ./configure --enable-stomp \
-    && make -j$(getconf _NPROCESSORS_ONLN) \
-    && make install \
-    && echo "extension=stomp.so" > ${php_conf_d}stomp.ini \
+#    && cd /usr/src/stomp-$STOMP_VER \
+#    && phpize \
+#    && ./configure --enable-stomp \
+#    && make -j$(getconf _NPROCESSORS_ONLN) \
+#    && make install \
+#    && echo "extension=stomp.so" > ${php_conf_d}stomp.ini \
 #
 # APK Del
     && apk del --no-network .build-deps;
