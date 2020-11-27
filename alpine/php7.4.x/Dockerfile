@@ -14,6 +14,8 @@ ENV IGBINARY_VER 3.1.6
 ENV REDIS_VER 5.3.2
 ENV XDEBUG_VER 3.0.0
 ENV SWOOLE_VER 4.5.9
+ENV MCRYPT_VER 1.0.3
+ENV MYSQL_VER master
 
 RUN set -xe \
     && addgroup -g 48 -S apache \
@@ -70,7 +72,8 @@ RUN set -xe \
         nghttp2-dev hiredis-dev openssl-dev \
 # for swoole extension
 #        libmcrypt-dev \
-# for mcrype extension
+# for mcrypt extension
+         libmcrypt-dev \
 #
 # add apk build deps
     && apk add --no-cache --virtual .build-deps \
@@ -87,16 +90,20 @@ RUN set -xe \
     && curl -fSL http://pecl.php.net/get/redis-$REDIS_VER.tgz -o redis.tgz \
     && curl -fSL http://pecl.php.net/get/xdebug-$XDEBUG_VER.tgz -o xdebug.tgz \
     && curl -fSL http://pecl.php.net/get/swoole-$SWOOLE_VER.tgz -o swoole.tgz \
+    && curl -fSL http://pecl.php.net/get/mcrypt-$MCRYPT_VER.tgz -o mcrypt.tgz \
+    && curl -fSL https://github.com/php/pecl-database-mysql/archive/$MYSQL_VER.tar.gz -o mysql.tar.gz \
 # 
 # Decompress
     && tar -zxvC /usr/src -f igbinary.tgz \
     && tar -zxvC /usr/src -f redis.tgz \
     && tar -zxvC /usr/src -f xdebug.tgz \
     && tar -zxvC /usr/src -f swoole.tgz \
+    && tar -zxvC /usr/src -f mcrypt.tgz \
+    && tar -zxvC /usr/src -f mysql.tar.gz \
 #
 # clean pecl compressed packages
     && rm -f igbinary.tgz redis.tgz xdebug.tgz \
-    swoole.tgz \
+    swoole.tgz mcrypt.tgz mysql.tar.gz \
 #
 # Install pecl igbinary
     && cd /usr/src/igbinary-$IGBINARY_VER \
@@ -141,6 +148,26 @@ RUN set -xe \
     && echo "extension=swoole.so" > ${php_conf_d}swoole.ini \
     && cd .. \
     && rm -rf /usr/src/swoole-$SWOOLE_VER \
+#
+# Install mcrypt
+    && cd /usr/src/mcrypt-$MCRYPT_VER \
+    && phpize \
+    && ./configure \
+    && make -j$(getconf _NPROCESSORS_ONLN) \
+    && make install \
+    && echo "extension=mcrypt.so" > ${php_conf_d}mcrypt.ini \
+    && cd .. \
+    && rm -rf /usr/src/mcrypt-$MCRYPT_VER \
+#
+# Install mysql
+    && cd /usr/src/pecl-database-mysql-$MYSQL_VER \
+    && phpize \
+    && ./configure \
+    && make -j$(getconf _NPROCESSORS_ONLN) \
+    && make install \
+    && echo "extension=mysql.so" > ${php_conf_d}mysql.ini \
+    && cd .. \
+    && rm -rf /usr/src/pecl-database-mysql-$MYSQL_VER \
 #
 # clean apk build deps
     && apk del .build-deps
