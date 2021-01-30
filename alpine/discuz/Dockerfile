@@ -10,11 +10,13 @@ LABEL Description="Discuz! X Docker" Vendor="Discuz! Team" Version="1.0.0"
 # temporary deps
 ENV TMP_DEPS \
 	autoconf \
+    bison \
     cmake \
     curl-dev \
     diffutils \
 	dpkg-dev dpkg \
 	file \
+    gawk \
 	g++ \
 	gcc \
 	libc-dev \
@@ -26,6 +28,7 @@ ENV TMP_DEPS \
     openssl-dev \
     patch \
 	pkgconf \
+    python3 \
 	re2c \
     rpcgen \
     tzdata 

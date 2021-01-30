@@ -9,11 +9,11 @@ LABEL Description="PHP v7.4.x Docker" Vendor="Demo Studio" Version="1.0.0"
 # Some Enviroment
 ENV php_conf_d /usr/local/etc/php/conf.d/
 
-ENV ALPINE_VERSION 3.12
-ENV IGBINARY_VER 3.1.6
+ENV ALPINE_VERSION 3.13
+ENV IGBINARY_VER 3.2.1
 ENV REDIS_VER 5.3.2
-ENV XDEBUG_VER 3.0.1
-ENV SWOOLE_VER 4.5.9
+ENV XDEBUG_VER 3.0.2
+ENV SWOOLE_VER 4.6.2
 ENV MCRYPT_VER 1.0.4
 ENV MYSQL_VER master
 
