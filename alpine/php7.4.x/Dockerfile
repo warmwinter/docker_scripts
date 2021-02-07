@@ -16,6 +16,12 @@ ENV XDEBUG_VER 3.0.2
 ENV SWOOLE_VER 4.6.2
 ENV MCRYPT_VER 1.0.4
 ENV MYSQL_VER master
+# http extension v4.x only PHP 8;
+# NEED raphf and propro extension, 
+# and MUST BE last loaded
+ENV RAPHF_VER 2.0.1
+ENV PROPRO_VER 2.1.0
+ENV HTTP_VER 3.2.4
 
 RUN set -xe \
     && addgroup -g 48 -S apache \
@@ -33,6 +39,7 @@ RUN set -xe \
     && echo 'nameserver 223.6.6.6' >> /etc/resolv.conf \
 #
 # Config the System, inclue timezone
+    && apk update \
     && apk add --no-cache --virtual .system-deps tzdata \
     && cp /usr/share/zoneinfo/Asia/Shanghai /etc/localtime \
     && echo 'Asia/Shanghai' > /etc/timezone \
@@ -65,15 +72,18 @@ RUN set -xe \
 #
 # add apk .phpext-deps, it's persistent
     && apk add --no-cache --virtual .php-extensions-deps \
-        icu-dev \
+        icu-dev  \
 # for intl extension
-        libvpx-dev libjpeg-turbo-dev libpng-dev zlib-dev libxpm-dev freetype-dev \
+        gd-dev libvpx-dev libjpeg-turbo-dev libpng-dev zlib-dev libxpm-dev freetype-dev \
 # for gd extension
         nghttp2-dev hiredis-dev openssl-dev \
 # for swoole extension
 #        libmcrypt-dev \
 # for mcrypt extension
          libmcrypt-dev \
+#
+# for php extension
+         brotli-dev curl-dev libevent-dev libidn2-dev libidn-dev icu-dev libidn-dev libidn2-dev \
 #
 # add apk build deps
     && apk add --no-cache --virtual .build-deps \
@@ -83,6 +93,8 @@ RUN set -xe \
 # Create source dolder
     && mkdir -p /usr/src \
 # Install exif gd intl mysqli pdo_mysql sockets
+    && docker-php-ext-configure gd --enable-gd --with-external-gd --with-webp \
+        --with-jpeg --with-xpm --with-freetype --enable-gd-jis-conv --with-pic \
     && docker-php-ext-install bcmath exif gd intl mysqli pdo_mysql sockets \
 # 
 # Fetch pecl
@@ -92,6 +104,9 @@ RUN set -xe \
     && curl -fSL http://pecl.php.net/get/swoole-$SWOOLE_VER.tgz -o swoole.tgz \
     && curl -fSL http://pecl.php.net/get/mcrypt-$MCRYPT_VER.tgz -o mcrypt.tgz \
     && curl -fSL https://github.com/php/pecl-database-mysql/archive/$MYSQL_VER.tar.gz -o mysql.tar.gz \
+    && curl -fSL https://pecl.php.net/get/raphf-$RAPHF_VER.tgz -o raphf.tgz \
+    && curl -fSL https://pecl.php.net/get/propro-$PROPRO_VER.tgz -o propro.tgz \
+    && curl -fSL https://pecl.php.net/get/pecl_http-$HTTP_VER.tgz -o pecl_http.tgz \
 # 
 # Decompress
     && tar -zxvC /usr/src -f igbinary.tgz \
@@ -100,10 +115,13 @@ RUN set -xe \
     && tar -zxvC /usr/src -f swoole.tgz \
     && tar -zxvC /usr/src -f mcrypt.tgz \
     && tar -zxvC /usr/src -f mysql.tar.gz \
+    && tar -zxvC /usr/src -f raphf.tgz \
+    && tar -zxvC /usr/src -f propro.tgz \
+    && tar -zxvC /usr/src -f pecl_http.tgz \
 #
 # clean pecl compressed packages
     && rm -f igbinary.tgz redis.tgz xdebug.tgz \
-    swoole.tgz mcrypt.tgz mysql.tar.gz \
+    swoole.tgz mcrypt.tgz mysql.tar.gz raphf.tgz propro.tgz pecl_http.tgz \
 #
 # Install pecl igbinary
     && cd /usr/src/igbinary-$IGBINARY_VER \
@@ -168,6 +186,41 @@ RUN set -xe \
     && echo "extension=mysql.so" > ${php_conf_d}mysql.ini \
     && cd .. \
     && rm -rf /usr/src/pecl-database-mysql-$MYSQL_VER \
+#
+# Install pecl raphf
+    && cd /usr/src/raphf-$RAPHF_VER \
+    && phpize \
+    && ./configure --enable-raphf \
+    && make -j$(getconf _NPROCESSORS_ONLN) \
+    && make install \
+    && echo "extension=raphf.so" > ${php_conf_d}raphf.ini \
+    && cd .. \
+    && rm -rf /usr/src/raphf-$RAPHF_VER \
+#
+# Install pecl propro
+    && cd /usr/src/propro-$PROPRO_VER \
+    && phpize \
+    && ./configure --enable-propro \
+    && make -j$(getconf _NPROCESSORS_ONLN) \
+    && make install \
+    && echo "extension=propro.so" > ${php_conf_d}propro.ini \
+    && cd .. \
+    && rm -rf /usr/src/propro-$PROPRO_VER \
+#
+# Install pecl http; MUST BE last loaded
+    && cd /usr/src/pecl_http-$HTTP_VER \
+    && phpize \
+    && ./configure --with-http-zlib-dir=/usr --with-http-libcurl-dir=/usr \
+        --with-http-libevent-dir=/usr --with-http-libicu-dir=/usr --with-http-libidn2-dir=/usr \
+        --with-http-libidn-dir=/usr --with-http-libidnkit2-dir=/usr --with-http-libidnkit-dir=/usr \
+    && make -j$(getconf _NPROCESSORS_ONLN) \
+    && make install \
+    && echo "extension=http.so" > ${php_conf_d}z_http.ini \
+    && cd .. \
+    && rm -rf /usr/src/pecl_http-$HTTP_VER \
+# composer
+    && curl -fSL https://mirrors.aliyun.com/composer/composer.phar -o /usr/src/composer.phar \
+    && php /usr/src/composer.phar config -g repo.packagist composer https://mirrors.aliyun.com/composer/ \
 #
 # clean apk build deps
     && apk del .build-deps
