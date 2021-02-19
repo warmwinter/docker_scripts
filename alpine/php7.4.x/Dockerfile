@@ -11,9 +11,9 @@ ENV php_conf_d /usr/local/etc/php/conf.d/
 
 ENV ALPINE_VERSION 3.13
 ENV IGBINARY_VER 3.2.1
-ENV REDIS_VER 5.3.2
+ENV REDIS_VER 5.3.3
 ENV XDEBUG_VER 3.0.2
-ENV SWOOLE_VER 4.6.2
+ENV SWOOLE_VER 4.6.3
 ENV MCRYPT_VER 1.0.4
 ENV MYSQL_VER master
 # http extension v4.x only PHP 8;

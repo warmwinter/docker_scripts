@@ -63,6 +63,9 @@ echo "Build image success"
 
 $CMD run --detach --interactive --name $IMAGEREPO-$IMAGETAG --privileged --publish 127.0.0.1:${LISTEN_PORT}:9000 --restart unless-stopped --tty --volume /web/wwwroot:/web/wwwroot:rw --volume /web/docker/logs/${IMAGEREPO}:/var/log/php-fpm:rw $IMAGEREPO:$IMAGETAG  
 
+# For UAT
+# $CMD run --detach --interactive --name $IMAGEREPO-$IMAGETAG --privileged --publish 127.0.0.1:5600:9000 --restart unless-stopped --tty --volume /alidata/website:/web/wwwroot:rw --volume /alidata/docker/logs/php56:/var/log/php-fpm:rw --volume /alidata/source:/alidata/source:rw --volume /data/log:/data/log:rw --volume /alidata/website:/alidata/website:rw $IMAGEREPO:$IMAGETAG 
+
 # check the running result
 
 if [ $? -ne 0 ]; then
