@@ -68,6 +68,7 @@ RUN set -xe \
         icu-dev \
 # for intl extension
         libvpx-dev libjpeg-turbo-dev libpng-dev zlib-dev libxpm-dev freetype-dev \
+        libwebp-dev libavif-dev \
 # for gd extension
         nghttp2-dev hiredis-dev openssl-dev \
 # for swoole extension
@@ -81,6 +82,9 @@ RUN set -xe \
 #
 # Create source dolder
     && mkdir -p /usr/src \
+# Configure gd extension
+    &&  docker-php-ext-configure gd --with-avif --with-webp --with-jpeg \
+        --with-xpm --with-freetype --enable-gd-jis-conv \
 # Install exif gd intl mysqli pdo_mysql sockets
     && docker-php-ext-install exif gd intl mysqli pdo_mysql sockets \
 # 
