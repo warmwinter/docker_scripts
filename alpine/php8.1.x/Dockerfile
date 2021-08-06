@@ -3,7 +3,7 @@
 # https://hub.docker.com/_/php?tab=tags&page=1&name=fpm-alpine
 # docker pull php:8.1.0beta1-fpm-alpine3.14
 
-FROM php:8.1.0beta1-fpm-alpine
+FROM php:8.1.0beta2-fpm-alpine
 
 LABEL Description="PHP v8.1.x Docker" Vendor="Demo Studio" Version="1.0.0"
 
@@ -85,11 +85,11 @@ RUN set -xe \
     && docker-php-ext-install exif gd intl mysqli pdo_mysql sockets \
 # 
 # Fetch pecl
-    && curl -fSL http://pecl.php.net/get/igbinary-$IGBINARY_VER.tgz -o igbinary.tgz \
-    && curl -fSL http://pecl.php.net/get/redis-$REDIS_VER.tgz -o redis.tgz \
-    && curl -fSL http://pecl.php.net/get/xdebug-$XDEBUG_VER.tgz -o xdebug.tgz \
-    && curl -fSL http://pecl.php.net/get/swoole-$SWOOLE_VER.tgz -o swoole.tgz \
-    && curl -fSL http://pecl.php.net/get/stomp-$STOMP_VER.tgz -o stomp.tgz \
+    && curl --retry-delay 2 --retry 99 -fSL https://pecl.php.net/get/igbinary-$IGBINARY_VER.tgz -o igbinary.tgz \
+    && curl --retry-delay 2 --retry 99 -fSL https://pecl.php.net/get/redis-$REDIS_VER.tgz -o redis.tgz \
+    && curl --retry-delay 2 --retry 99 -fSL https://pecl.php.net/get/xdebug-$XDEBUG_VER.tgz -o xdebug.tgz \
+    && curl --retry-delay 2 --retry 99 -fSL https://pecl.php.net/get/swoole-$SWOOLE_VER.tgz -o swoole.tgz \
+    && curl --retry-delay 2 --retry 99 -fSL https://pecl.php.net/get/stomp-$STOMP_VER.tgz -o stomp.tgz \
 # 
 # Decompress
     && tar -zxvC /usr/src -f igbinary.tgz \
@@ -136,14 +136,14 @@ RUN set -xe \
     && rm -rf /usr/src/xdebug-$XDEBUG_VER \
 #
 # Install swoole
-    && cd /usr/src/swoole-$SWOOLE_VER \
-    && phpize \
-    && ./configure --enable-sockets --enable-openssl \
-        --enable-http2 --enable-swoole --enable-mysqlnd \
-    && make -j$(getconf _NPROCESSORS_ONLN) \
-    && make install \
-    && echo "extension=swoole.so" > ${php_conf_d}swoole.ini \
-    && cd .. \
+    #&& cd /usr/src/swoole-$SWOOLE_VER \
+    #&& phpize \
+    #&& ./configure --enable-sockets --enable-openssl \
+    #    --enable-http2 --enable-swoole --enable-mysqlnd \
+    #&& make -j$(getconf _NPROCESSORS_ONLN) \
+    #&& make install \
+    #&& echo "extension=swoole.so" > ${php_conf_d}swoole.ini \
+    #&& cd .. \
     && rm -rf /usr/src/swoole-$SWOOLE_VER \
 #
 # install stomp
