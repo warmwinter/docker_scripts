@@ -89,11 +89,11 @@ RUN set -xe \
     && docker-php-ext-install exif gd intl mysqli pdo_mysql sockets \
 # 
 # Fetch pecl
-    && curl --retry-delay 2 --retry 99 -fSL https://pecl.php.net/get/igbinary-$IGBINARY_VER.tgz -o igbinary.tgz \
-    && curl --retry-delay 2 --retry 99 -fSL https://pecl.php.net/get/redis-$REDIS_VER.tgz -o redis.tgz \
-    && curl --retry-delay 2 --retry 99 -fSL https://pecl.php.net/get/xdebug-$XDEBUG_VER.tgz -o xdebug.tgz \
-    && curl --retry-delay 2 --retry 99 -fSL https://pecl.php.net/get/swoole-$SWOOLE_VER.tgz -o swoole.tgz \
-    && curl --retry-delay 2 --retry 99 -fSL https://pecl.php.net/get/stomp-$STOMP_VER.tgz -o stomp.tgz \
+    && curl --retry-delay 2 --retry 99 -fSL http://pecl.php.net/get/igbinary-$IGBINARY_VER.tgz -o igbinary.tgz \
+    && curl --retry-delay 2 --retry 99 -fSL http://pecl.php.net/get/redis-$REDIS_VER.tgz -o redis.tgz \
+    && curl --retry-delay 2 --retry 99 -fSL http://pecl.php.net/get/xdebug-$XDEBUG_VER.tgz -o xdebug.tgz \
+    && curl --retry-delay 2 --retry 99 -fSL http://pecl.php.net/get/swoole-$SWOOLE_VER.tgz -o swoole.tgz \
+    && curl --retry-delay 2 --retry 99 -fSL http://pecl.php.net/get/stomp-$STOMP_VER.tgz -o stomp.tgz \
 # 
 # Decompress
     && tar -zxvC /usr/src -f igbinary.tgz \
