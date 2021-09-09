@@ -3,7 +3,7 @@
 # https://hub.docker.com/_/php?tab=tags&page=1&name=fpm-alpine
 # docker pull php:8.1.0beta1-fpm-alpine3.14
 
-FROM php:8.1.0beta3-fpm-alpine
+FROM php:8.1.0RC1-fpm-alpine
 
 LABEL Description="PHP v8.1.x Docker" Vendor="Demo Studio" Version="1.0.0"
 
@@ -91,16 +91,16 @@ RUN set -xe \
     && curl --retry-delay 2 --retry 99 -fSL http://pecl.php.net/get/igbinary-$IGBINARY_VER.tgz -o igbinary.tgz \
     && curl --retry-delay 2 --retry 99 -fSL http://pecl.php.net/get/redis-$REDIS_VER.tgz -o redis.tgz \
     && curl --retry-delay 2 --retry 99 -fSL http://pecl.php.net/get/xdebug-$XDEBUG_VER.tgz -o xdebug.tgz \
-    # && curl --retry-delay 2 --retry 99 -fSL http://pecl.php.net/get/swoole-$SWOOLE_VER.tgz -o swoole.tgz \
-    && curl --retry-delay 2 --retry 99 -fSL https://github.com/swoole/swoole-src/archive/refs/tags/v${SWOOLE_VER}.tar.gz -o swoole.tar.gz \
+    && curl --retry-delay 2 --retry 99 -fSL http://pecl.php.net/get/swoole-$SWOOLE_VER.tgz -o swoole.tgz \
+    # && curl --retry-delay 2 --retry 99 -fSL https://github.com/swoole/swoole-src/archive/refs/tags/v${SWOOLE_VER}.tar.gz -o swoole.tar.gz \
 # 
 # Decompress
     && tar -zxvC /usr/src -f igbinary.tgz \
     && tar -zxvC /usr/src -f redis.tgz \
     && tar -zxvC /usr/src -f xdebug.tgz \
-    #&& tar -zxvC /usr/src -f swoole.tgz \
-    && mkdir -p /usr/src/swoole-$SWOOLE_VER \
-    && tar --strip-components=1 -zxvC /usr/src/swoole-$SWOOLE_VER -f swoole.tar.gz \
+    && tar -zxvC /usr/src -f swoole.tgz \
+    # && mkdir -p /usr/src/swoole-$SWOOLE_VER \
+    # && tar --strip-components=1 -zxvC /usr/src/swoole-$SWOOLE_VER -f swoole.tar.gz \
 #
 # clean pecl compressed packages
     && rm -f igbinary.tgz redis.tgz xdebug.tgz \
