@@ -3,7 +3,7 @@
 # https://hub.docker.com/_/php?tab=tags&page=1&name=fpm-alpine
 # docker pull php:8.1.0beta1-fpm-alpine3.14
 
-FROM php:8.1.0RC1-fpm-alpine
+FROM php:8.1.0RC2-fpm-alpine
 
 LABEL Description="PHP v8.1.x Docker" Vendor="Demo Studio" Version="1.0.0"
 
