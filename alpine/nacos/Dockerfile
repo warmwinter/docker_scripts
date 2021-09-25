@@ -6,6 +6,7 @@
 # https://hub.docker.com/_/alpine
 # https://github.com/nacos-group/nacos-docker
 # https://github.com/alpinelinux/docker-alpine
+# https://pkgs.alpinelinux.org/
 
 FROM alpine:3.14
 
@@ -19,9 +20,9 @@ ENV ALPINE_VERSION="3.14" \
     CLASSPATH=".:/home/nacos/conf:$CLASSPATH" \
     CLUSTER_CONF="/home/nacos/conf/cluster.conf" \
     FUNCTION_MODE="all" \
-    JAVA_HOME="/usr/lib/jvm/java-11-openjdk" \
+    JAVA_HOME="/usr/lib/jvm/java-1.8-openjdk" \
     NACOS_USER="nacos" \
-    JAVA="/usr/lib/jvm/java-11-openjdk/bin/java" \
+    JAVA="/usr/lib/jvm/java-1.8-openjdk/bin/java" \
     JVM_XMS="1g" \
     JVM_XMX="1g" \
     JVM_XMN="512m" \
@@ -32,7 +33,8 @@ ENV ALPINE_VERSION="3.14" \
     TIME_ZONE="Asia/Shanghai"
 
 # Common property configuration
-ENV MYSQL_SERVICE_HOST="127.0.0.1" \
+ENV SPRING_DATASOURCE_PLATFORM="mysql" \
+    MYSQL_SERVICE_HOST="127.0.0.1" \
     MYSQL_SERVICE_PORT="3306" \
     MYSQL_SERVICE_DB_NAME="nacos" \
     MYSQL_SERVICE_USER="root" \
@@ -44,6 +46,7 @@ ENV MYSQL_SERVICE_HOST="127.0.0.1" \
 ARG NACOS_VERSION=2.0.3
 ARG HOT_FIX_FLAG=""
 ARG LOCAL_MIRROR=""
+ARG ROCKSDB_VERSION=6.22.1
 
 WORKDIR $BASE_DIR
 
@@ -60,16 +63,38 @@ RUN set -xe \
     && echo 'nameserver 223.6.6.6' >> /etc/resolv.conf \
 #
 # Config the System, inclue timezone
-    && apk add --no-cache --virtual .system-deps tzdata \
+    && apk add --no-cache --virtual .system-deps tzdata gcc make g++ perl linux-headers \
     && cp /usr/share/zoneinfo/$TIME_ZONE /etc/localtime \
     && echo $TIME_ZONE > /etc/timezone \
     && date \
-    && apk del .system-deps \
 # 
     && apk upgrade \
-    && apk add --no-cache bash openjdk11-jdk wget iputils netcat-openbsd vim libcurl \
+    && apk add --no-cache bash openjdk8 wget iputils netcat-openbsd vim libcurl \
     && echo $LOCAL_MIRROR \
-    && echo $MODE
+    && echo $MODE \
+    && pwd \
+#
+# install rocksdb
+# https://github.com/facebook/rocksdb/blob/main/INSTALL.md
+# 
+    && apk add --no-cache zlib-dev bzip2 bzip2-dev lz4-dev snappy-dev gflags-dev zstd-dev libc6-compat \
+    && ln -s /lib/libc.musl-x86_64.so.1 /lib/ld-linux-x86-64.so.2 \
+# https://github.com/facebook/rocksdb/archive/refs/tags/v6.22.1.tar.gz
+    && if [ -z "$LOCAL_MIRROR" ]; then \
+        wget -t 0 https://github.com/facebook/rocksdb/archive/refs/tags/v${ROCKSDB_VERSION}.tar.gz -O rocksdb-${ROCKSDB_VERSION}.tar.gz; \
+    else \
+        wget -t 0 https://mirrors.inproc.top/rocksdb-${ROCKSDB_VERSION}.tar.gz; \
+    fi \
+    && tar zxf rocksdb-${ROCKSDB_VERSION}.tar.gz \
+    && cd rocksdb-${ROCKSDB_VERSION} \
+    && make shared_lib \
+    && cp librocksdb.so.${ROCKSDB_VERSION} /usr/lib/librocksdb.so \
+    && cd .. \
+    && rm -rf rocksdb-* \
+#
+# clean packages
+    && apk del .system-deps
+
 RUN if [ -z "$LOCAL_MIRROR" ]; then \
         wget -t 0 https://github.com/alibaba/nacos/releases/download/${NACOS_VERSION}${HOT_FIX_FLAG}/nacos-server-${NACOS_VERSION}.tar.gz -P /home; \
     else \

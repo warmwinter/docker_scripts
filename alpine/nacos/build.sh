@@ -62,7 +62,7 @@ echo "Build image success"
 
 # rebuild the container
 
-$CMD run --detach --interactive --name $IMAGEREPO-$IMAGETAG -e MODE=standalone -e MYSQL_SERVICE_HOST=${LOCAL_IP} -e MYSQL_SERVICE_USER="dbadmin" -e MYSQL_SERVICE_PASSWORD="dbAdmin6yhn&UJM" --privileged --publish ${LISTEN_PORT}:8848 --restart unless-stopped --tty --volume /web/wwwroot:/web/wwwroot:rw --volume /web/docker/logs/${IMAGEREPO}:/home/nacos/logs:rw $IMAGEREPO:$IMAGETAG  
+$CMD run --detach --interactive --name $IMAGEREPO-$IMAGETAG -e MODE=standalone -e MYSQL_SERVICE_HOST=${LOCAL_IP} -e MYSQL_SERVICE_USER="dbnative" -e MYSQL_SERVICE_PASSWORD="dbNative@WSX3edc" --privileged --publish ${LISTEN_PORT}:8848 --restart unless-stopped --tty --volume /web/wwwroot:/web/wwwroot:rw --volume /web/docker/logs/${IMAGEREPO}:/home/nacos/logs:rw $IMAGEREPO:$IMAGETAG  
 
 # check the running result
 
