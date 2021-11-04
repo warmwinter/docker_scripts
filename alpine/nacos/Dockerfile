@@ -46,7 +46,7 @@ ENV SPRING_DATASOURCE_PLATFORM="mysql" \
 ARG NACOS_VERSION=2.0.3
 ARG HOT_FIX_FLAG=""
 ARG LOCAL_MIRROR=""
-ARG ROCKSDB_VERSION=6.22.1
+ARG ROCKSDB_VERSION=6.25.3
 
 WORKDIR $BASE_DIR
 
@@ -63,7 +63,7 @@ RUN set -xe \
     && echo 'nameserver 223.6.6.6' >> /etc/resolv.conf \
 #
 # Config the System, inclue timezone
-    && apk add --no-cache --virtual .system-deps tzdata gcc make g++ perl linux-headers \
+    && apk add --no-cache --virtual .system-deps tzdata gcc make g++ perl linux-headers binutils \
     && cp /usr/share/zoneinfo/$TIME_ZONE /etc/localtime \
     && echo $TIME_ZONE > /etc/timezone \
     && date \
@@ -89,6 +89,7 @@ RUN set -xe \
     && cd rocksdb-${ROCKSDB_VERSION} \
     && make shared_lib \
     && cp librocksdb.so.${ROCKSDB_VERSION} /usr/lib/librocksdb.so \
+    && strip /usr/lib/librocksdb.so \
     && cd .. \
     && rm -rf rocksdb-* \
 #
