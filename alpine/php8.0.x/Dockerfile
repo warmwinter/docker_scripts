@@ -10,10 +10,10 @@ LABEL Description="PHP v8.0.x Docker" Vendor="Demo Studio" Version="1.0.0"
 ENV php_conf_d /usr/local/etc/php/conf.d/
 
 ENV ALPINE_VERSION 3.14
-ENV IGBINARY_VER 3.2.4
+ENV IGBINARY_VER 3.2.6
 ENV REDIS_VER 5.3.4
-ENV XDEBUG_VER 3.0.4
-ENV SWOOLE_VER 4.7.0
+ENV XDEBUG_VER 3.1.1
+ENV SWOOLE_VER 4.8.1
 ENV STOMP_VER 2.0.2
 
 RUN set -xe \
@@ -84,11 +84,11 @@ RUN set -xe \
     && docker-php-ext-install exif gd intl mysqli pdo_mysql sockets \
 # 
 # Fetch pecl
-    && curl -fSL http://pecl.php.net/get/igbinary-$IGBINARY_VER.tgz -o igbinary.tgz \
-    && curl -fSL http://pecl.php.net/get/redis-$REDIS_VER.tgz -o redis.tgz \
-    && curl -fSL http://pecl.php.net/get/xdebug-$XDEBUG_VER.tgz -o xdebug.tgz \
-    && curl -fSL http://pecl.php.net/get/swoole-$SWOOLE_VER.tgz -o swoole.tgz \
-    && curl -fSL http://pecl.php.net/get/stomp-$STOMP_VER.tgz -o stomp.tgz \
+    && curl --retry-delay 2 --retry 99 -fSL http://pecl.php.net/get/igbinary-$IGBINARY_VER.tgz -o igbinary.tgz \
+    && curl --retry-delay 2 --retry 99 -fSL http://pecl.php.net/get/redis-$REDIS_VER.tgz -o redis.tgz \
+    && curl --retry-delay 2 --retry 99 -fSL http://pecl.php.net/get/xdebug-$XDEBUG_VER.tgz -o xdebug.tgz \
+    && curl --retry-delay 2 --retry 99 -fSL http://pecl.php.net/get/swoole-$SWOOLE_VER.tgz -o swoole.tgz \
+    && curl --retry-delay 2 --retry 99 -fSL http://pecl.php.net/get/stomp-$STOMP_VER.tgz -o stomp.tgz \
 # 
 # Decompress
     && tar -zxvC /usr/src -f igbinary.tgz \
