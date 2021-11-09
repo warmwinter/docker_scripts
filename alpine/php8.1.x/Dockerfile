@@ -70,6 +70,8 @@ RUN set -xe \
         libwebp-dev libavif-dev \
 # for gd extension
         nghttp2-dev hiredis-dev openssl-dev \
+# for pgsql
+        postgresql-dev \
 # for swoole extension
 #        libmcrypt-dev \
 # for mcrype extension
@@ -85,7 +87,7 @@ RUN set -xe \
     &&  docker-php-ext-configure gd --with-avif --with-webp --with-jpeg \
         --with-xpm --with-freetype --enable-gd-jis-conv \
 # Install exif gd intl mysqli pdo_mysql sockets
-    && docker-php-ext-install exif gd intl mysqli pdo_mysql sockets \
+    && docker-php-ext-install exif gd intl mysqli pdo_mysql sockets pdo_pgsql pgsql \
 # 
 # Fetch pecl
     && curl --retry-delay 2 --retry 99 -fSL http://pecl.php.net/get/igbinary-$IGBINARY_VER.tgz -o igbinary.tgz \
