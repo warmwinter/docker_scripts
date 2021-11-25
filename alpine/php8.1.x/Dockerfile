@@ -3,7 +3,7 @@
 # https://hub.docker.com/_/php?tab=tags&page=1&name=fpm-alpine
 # docker pull php:8.1.0beta1-fpm-alpine3.14
 
-FROM php:8.1.0RC6-fpm-alpine
+FROM php:8.1.0RC6-fpm-alpine3.14
 
 LABEL Description="PHP v8.1.x Docker" Vendor="Demo Studio" Version="1.0.0"
 
@@ -14,7 +14,7 @@ ENV ALPINE_VERSION 3.14
 ENV IGBINARY_VER 3.2.6
 ENV REDIS_VER 5.3.4
 ENV XDEBUG_VER 3.1.1
-ENV SWOOLE_VER 4.8.1
+ENV SWOOLE_VER 4.8.2
 
 RUN set -xe \
     && addgroup -g 48 -S apache \

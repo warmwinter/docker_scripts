@@ -2,7 +2,7 @@
 
 # https://hub.docker.com/_/php?tab=tags&page=1&name=fpm-alpine
 
-FROM php:8-fpm-alpine
+FROM php:8.0-fpm-alpine3.14
 
 LABEL Description="PHP v8.0.x Docker" Vendor="Demo Studio" Version="1.0.0"
 
@@ -13,8 +13,7 @@ ENV ALPINE_VERSION 3.14
 ENV IGBINARY_VER 3.2.6
 ENV REDIS_VER 5.3.4
 ENV XDEBUG_VER 3.1.1
-ENV SWOOLE_VER 4.8.1
-ENV STOMP_VER 2.0.2
+ENV SWOOLE_VER 4.8.2
 
 RUN set -xe \
     && addgroup -g 48 -S apache \
@@ -67,6 +66,7 @@ RUN set -xe \
         icu-dev \
 # for intl extension
         libvpx-dev libjpeg-turbo-dev libpng-dev zlib-dev libxpm-dev freetype-dev \
+        libwebp-dev \
 # for gd extension
         nghttp2-dev hiredis-dev openssl-dev \
 # for pgsql
@@ -82,6 +82,9 @@ RUN set -xe \
 #
 # Create source dolder
     && mkdir -p /usr/src \
+# Configure gd extension
+    &&  docker-php-ext-configure gd --with-webp --with-jpeg \
+        --with-xpm --with-freetype --enable-gd-jis-conv \
 # Install exif gd intl mysqli pdo_mysql sockets
     && docker-php-ext-install exif gd intl mysqli pdo_mysql sockets pdo_pgsql pgsql \
 # 
@@ -90,14 +93,12 @@ RUN set -xe \
     && curl --retry-delay 2 --retry 99 -fSL http://pecl.php.net/get/redis-$REDIS_VER.tgz -o redis.tgz \
     && curl --retry-delay 2 --retry 99 -fSL http://pecl.php.net/get/xdebug-$XDEBUG_VER.tgz -o xdebug.tgz \
     && curl --retry-delay 2 --retry 99 -fSL http://pecl.php.net/get/swoole-$SWOOLE_VER.tgz -o swoole.tgz \
-    && curl --retry-delay 2 --retry 99 -fSL http://pecl.php.net/get/stomp-$STOMP_VER.tgz -o stomp.tgz \
 # 
 # Decompress
     && tar -zxvC /usr/src -f igbinary.tgz \
     && tar -zxvC /usr/src -f redis.tgz \
     && tar -zxvC /usr/src -f xdebug.tgz \
     && tar -zxvC /usr/src -f swoole.tgz \
-    && tar -zxvC /usr/src -f stomp.tgz \
 #
 # clean pecl compressed packages
     && rm -f igbinary.tgz redis.tgz xdebug.tgz \
@@ -146,14 +147,6 @@ RUN set -xe \
     && echo "extension=swoole.so" > ${php_conf_d}swoole.ini \
     && cd .. \
     && rm -rf /usr/src/swoole-$SWOOLE_VER \
-#
-# install stomp
-#    && cd /usr/src/stomp-$STOMP_VER \
-#    && phpize \
-#    && ./configure --enable-stomp \
-#    && make -j$(getconf _NPROCESSORS_ONLN) \
-#    && make install \
-#    && echo "extension=stomp.so" > ${php_conf_d}stomp.ini \
 #
 # clean apk build deps
     && apk del .build-deps
