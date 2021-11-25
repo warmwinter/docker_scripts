@@ -48,7 +48,7 @@ fi
 
 # rebuild image
 
-$CMD build --force-rm --pull --rm --tag $IMAGEREPO:$IMAGETAG . 
+$CMD build --build-arg LOCAL_MIRROR=true --force-rm --pull --rm --tag $IMAGEREPO:$IMAGETAG . 
 
 # check the buliding result
 

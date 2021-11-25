@@ -16,6 +16,8 @@ ENV REDIS_VER 5.3.4
 ENV XDEBUG_VER 3.1.1
 ENV SWOOLE_VER 4.8.2
 
+ARG LOCAL_MIRROR=""
+
 RUN set -xe \
     && addgroup -g 48 -S apache \
     && adduser -u 48 -D -S -G apache apache \
@@ -87,8 +89,25 @@ RUN set -xe \
     &&  docker-php-ext-configure gd --with-avif --with-webp --with-jpeg \
         --with-xpm --with-freetype --enable-gd-jis-conv \
 # Install exif gd intl mysqli pdo_mysql sockets
-    && docker-php-ext-install exif gd intl mysqli pdo_mysql sockets pdo_pgsql pgsql \
+    && docker-php-ext-install exif gd intl mysqli pdo_mysql sockets pdo_pgsql pgsql
 # 
+# Install mysql
+RUN if [ -z "$LOCAL_MIRROR" ]; then \
+        curl --retry-delay 2 --retry 99 -fSL https://github.com/php/pecl-database-mysql/archive/refs/heads/master.tar.gz -o pecl-database-mysql-master.tar.gz; \
+    else \
+        curl --retry-delay 2 --retry 99 -fSL https://mirrors.inproc.top/pecl-database-mysql-master.tar.gz -o pecl-database-mysql-master.tar.gz; \
+    fi
+RUN tar -zxvC /usr/src -f pecl-database-mysql-master.tar.gz \
+    && rm -f pecl-database-mysql-master.tar.gz \
+    && cd /usr/src/pecl-database-mysql-master \
+    && phpize \
+    && ./configure \
+    && make -j$(getconf _NPROCESSORS_ONLN) \
+    && make install \
+    && echo "extension=mysql.so" > ${php_conf_d}mysql.ini \
+    && cd .. \
+    && rm -rf /usr/src/pecl-database-mysql-master \
+#
 # Fetch pecl
     && curl --retry-delay 2 --retry 99 -fSL http://pecl.php.net/get/igbinary-$IGBINARY_VER.tgz -o igbinary.tgz \
     && curl --retry-delay 2 --retry 99 -fSL http://pecl.php.net/get/redis-$REDIS_VER.tgz -o redis.tgz \
