@@ -93,9 +93,9 @@ RUN set -xe \
 # 
 # Install mysql
 RUN if [ -z "$LOCAL_MIRROR" ]; then \
-        curl --retry-delay 2 --retry 99 -fSL https://github.com/php/pecl-database-mysql/archive/refs/heads/master.tar.gz -o pecl-database-mysql-master.tar.gz; \
+        curl --retry-all-errors --retry-delay 2 --retry 99 -fSL https://github.com/php/pecl-database-mysql/archive/refs/heads/master.tar.gz -o pecl-database-mysql-master.tar.gz; \
     else \
-        curl --retry-delay 2 --retry 99 -fSL https://mirrors.inproc.top/pecl-database-mysql-master.tar.gz -o pecl-database-mysql-master.tar.gz; \
+        curl --retry-all-errors --retry-delay 2 --retry 99 -fSL https://mirrors.inproc.top/pecl-database-mysql-master.tar.gz -o pecl-database-mysql-master.tar.gz; \
     fi
 RUN tar -zxvC /usr/src -f pecl-database-mysql-master.tar.gz \
     && rm -f pecl-database-mysql-master.tar.gz \
@@ -109,11 +109,11 @@ RUN tar -zxvC /usr/src -f pecl-database-mysql-master.tar.gz \
     && rm -rf /usr/src/pecl-database-mysql-master \
 #
 # Fetch pecl
-    && curl --retry-delay 2 --retry 99 -fSL http://pecl.php.net/get/igbinary-$IGBINARY_VER.tgz -o igbinary.tgz \
-    && curl --retry-delay 2 --retry 99 -fSL http://pecl.php.net/get/redis-$REDIS_VER.tgz -o redis.tgz \
-    && curl --retry-delay 2 --retry 99 -fSL http://pecl.php.net/get/xdebug-$XDEBUG_VER.tgz -o xdebug.tgz \
-    && curl --retry-delay 2 --retry 99 -fSL http://pecl.php.net/get/swoole-$SWOOLE_VER.tgz -o swoole.tgz \
-    # && curl --retry-delay 2 --retry 99 -fSL https://github.com/swoole/swoole-src/archive/refs/tags/v${SWOOLE_VER}.tar.gz -o swoole.tar.gz \
+    && curl --retry-all-errors --retry-delay 2 --retry 99 -fSL http://pecl.php.net/get/igbinary-$IGBINARY_VER.tgz -o igbinary.tgz \
+    && curl --retry-all-errors --retry-delay 2 --retry 99 -fSL http://pecl.php.net/get/redis-$REDIS_VER.tgz -o redis.tgz \
+    && curl --retry-all-errors --retry-delay 2 --retry 99 -fSL http://pecl.php.net/get/xdebug-$XDEBUG_VER.tgz -o xdebug.tgz \
+    && curl --retry-all-errors --retry-delay 2 --retry 99 -fSL http://pecl.php.net/get/swoole-$SWOOLE_VER.tgz -o swoole.tgz \
+    # && curl --retry-all-errors --retry-delay 2 --retry 99 -fSL https://github.com/swoole/swoole-src/archive/refs/tags/v${SWOOLE_VER}.tar.gz -o swoole.tar.gz \
 # 
 # Decompress
     && tar -zxvC /usr/src -f igbinary.tgz \
