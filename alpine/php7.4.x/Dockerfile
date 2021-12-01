@@ -2,18 +2,18 @@
 
 # https://hub.docker.com/_/php?tab=tags&page=1&name=fpm-alpine
 
-FROM php:7.4-fpm-alpine
+FROM php:7.4-fpm-alpine3.15
 
 LABEL Description="PHP v7.4.x Docker" Vendor="Demo Studio" Version="1.0.0"
 
 # Some Enviroment
 ENV php_conf_d /usr/local/etc/php/conf.d/
 
-ENV ALPINE_VERSION 3.13
-ENV IGBINARY_VER 3.2.1
-ENV REDIS_VER 5.3.3
-ENV XDEBUG_VER 3.0.2
-ENV SWOOLE_VER 4.6.3
+ENV ALPINE_VERSION 3.15
+ENV IGBINARY_VER 3.2.6
+ENV REDIS_VER 5.3.4
+ENV XDEBUG_VER 3.1.1
+ENV SWOOLE_VER 4.8.2
 ENV MCRYPT_VER 1.0.4
 ENV MYSQL_VER master
 # http extension v4.x only PHP 8;
@@ -21,7 +21,7 @@ ENV MYSQL_VER master
 # and MUST BE last loaded
 ENV RAPHF_VER 2.0.1
 ENV PROPRO_VER 2.1.0
-ENV HTTP_VER 3.2.4
+ENV HTTP_VER 4.2.1
 
 RUN set -xe \
     && addgroup -g 48 -S apache \

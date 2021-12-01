@@ -15,6 +15,9 @@ ENV SWOOLE_VER 4.8.2
 
 ENV WWW_USER=apache
 
+# MAN page https://curl.se/docs/manpage.html
+ENV CURL_CMD="curl --retry-all-errors --retry-delay 2 --retry 99 -fL "
+
 ARG LOCAL_MIRROR=""
 
 # dependencies required for running "phpize"
@@ -100,14 +103,14 @@ RUN set -eux; \
 	mkdir -p /usr/src; \
 	cd /usr/src; \
 	\
-	curl --retry-all-errors --retry-delay 2 --retry 99 -fsSL -o php.tar.xz "$PHP_URL"; \
+	${CURL_CMD} -o php.tar.xz "$PHP_URL"; \
 	\
 	if [ -n "$PHP_SHA256" ]; then \
 		echo "$PHP_SHA256 *php.tar.xz" | sha256sum -c -; \
 	fi; \
 	\
 	if [ -n "$PHP_ASC_URL" ]; then \
-		curl --retry-all-errors --retry-delay 2 --retry 99 -fsSL -o php.tar.xz.asc "$PHP_ASC_URL"; \
+		${CURL_CMD} -o php.tar.xz.asc "$PHP_ASC_URL"; \
 		export GNUPGHOME="$(mktemp -d)"; \
 		for key in $GPG_KEYS; do \
 			gpg --batch --keyserver keyserver.ubuntu.com --recv-keys "$key"; \
