@@ -50,13 +50,14 @@ RUN set -xe \
     && date \
 # 
     && apk upgrade \
-    && apk add --no-cache bash openjdk17 curl vim \
+    && apk add --no-cache bash openjdk17 curl \
     && echo $LOCAL_MIRROR \
     && echo $MODE \
     && pwd  \
     # clean packages
     && apk del .system-deps; \
     \
+    mkdir -p ${ARTEMIS_HOME}; \
     mkdir -p ${BROKER_HOME};
 
 # Download artemis
@@ -68,12 +69,12 @@ RUN set -xe; \
         ${CURL_CMD} "https://mirrors.inproc.top/apache-artemis-${ARTEMIS_VERSION}-bin.tar.gz" -o artemis.tar.gz; \
     fi; \
     \
-    tar zxf artemis.tar.gz; \
+    tar --strip-components=1 -C ${ARTEMIS_HOME} -zxf artemis.tar.gz; \
     rm -f artemis.tar.gz; \
-    mv apache-artemis-${ARTEMIS_VERSION} artemis; \
     cd ${BROKER_HOME}; \
-    ${ARTEMIS_HOME}/bin/artemis create --force --password ${BROKER_PWD} --require-login --user {$BROKER_USER} ${BROKER_DIR}; \
-    cd ..; 
+    ${ARTEMIS_HOME}/bin/artemis create --force --http-host 0.0.0.0 --password ${BROKER_PWD} --require-login --user {$BROKER_USER} ${BROKER_DIR}; \
+    cd ..; \
+    ln -s "${BROKER_HOME}/${BROKER_DIR}/bin/artemis" /usr/local/bin/;
 
 # Web Server
 EXPOSE 8161
@@ -97,4 +98,4 @@ EXPOSE 1883
 EXPOSE 61613
 
 #ENTRYPOINT ["bin/docker-startup.sh"]
-CMD [{$BROKER_HOME}"/"${BROKER_DIR}"/bin/artemis run", "run"]
+CMD ["artemis", "run"]
