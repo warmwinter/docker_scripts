@@ -21,7 +21,8 @@ ENV MYSQL_VER master
 # and MUST BE last loaded
 ENV RAPHF_VER 2.0.1
 ENV PROPRO_VER 2.1.0
-ENV HTTP_VER 4.2.1
+# pecl_http v4.x is PHP-8 only.
+ENV HTTP_VER 3.2.4
 
 RUN set -xe \
     && addgroup -g 48 -S apache \
