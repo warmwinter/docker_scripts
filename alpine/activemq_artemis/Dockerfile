@@ -72,7 +72,7 @@ RUN set -xe; \
     tar --strip-components=1 -C ${ARTEMIS_HOME} -zxf artemis.tar.gz; \
     rm -f artemis.tar.gz; \
     cd ${BROKER_HOME}; \
-    ${ARTEMIS_HOME}/bin/artemis create --force --http-host 0.0.0.0 --password ${BROKER_PWD} --require-login --user {$BROKER_USER} ${BROKER_DIR}; \
+    ${ARTEMIS_HOME}/bin/artemis create --encoding UTF-8 --force --http-host 0.0.0.0 --password ${BROKER_PWD} --require-login --role admin --use-client-auth --user ${BROKER_USER} ${BROKER_DIR}; \
     cd ..; \
     ln -s "${BROKER_HOME}/${BROKER_DIR}/bin/artemis" /usr/local/bin/;
 
