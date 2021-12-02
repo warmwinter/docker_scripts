@@ -73,6 +73,7 @@ RUN set -xe; \
     rm -f artemis.tar.gz; \
     cd ${BROKER_HOME}; \
     ${ARTEMIS_HOME}/bin/artemis create --encoding UTF-8 --force --http-host 0.0.0.0 --password ${BROKER_PWD} --require-login --role admin --use-client-auth --user ${BROKER_USER} ${BROKER_DIR}; \
+    sed -i "/<cors>/a\        <allow-origin>*:\/\/*<\/allow-origin>\n" ${BROKER_DIR}/etc/jolokia-access.xml; \
     cd ..; \
     ln -s "${BROKER_HOME}/${BROKER_DIR}/bin/artemis" /usr/local/bin/;
 
