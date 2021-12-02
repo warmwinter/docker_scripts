@@ -27,7 +27,7 @@ ENV ARTEMIS_VERSION=2.19.0 \
     BROKER_HOME="${BASE_DIR}/brokers" \
     BROKER_DIR="mainBroker" \
     BROKER_USER="admin" \
-    BROKER_PWD="admin"
+    BROKER_PWD="admin123"
 
 WORKDIR $BASE_DIR
 
