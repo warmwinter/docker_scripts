@@ -10,10 +10,10 @@ LABEL Description="PHP v7.4.x Docker" Vendor="Demo Studio" Version="1.0.0"
 ENV php_conf_d /usr/local/etc/php/conf.d/
 
 ENV ALPINE_VERSION 3.15
-ENV IGBINARY_VER 3.2.6
-ENV REDIS_VER 5.3.4
-ENV XDEBUG_VER 3.1.1
-ENV SWOOLE_VER 4.8.2
+ENV IGBINARY_VER 3.2.7
+ENV REDIS_VER 5.3.7
+ENV XDEBUG_VER 3.1.3
+ENV SWOOLE_VER 4.8.8
 ENV MCRYPT_VER 1.0.4
 ENV MYSQL_VER master
 # http extension v4.x only PHP 8;
@@ -22,7 +22,9 @@ ENV MYSQL_VER master
 ENV RAPHF_VER 2.0.1
 ENV PROPRO_VER 2.1.0
 # pecl_http v4.x is PHP-8 only.
-ENV HTTP_VER 3.2.4
+ENV HTTP_VER 3.2.5
+# decimal
+ENV DECIMAL_VER 1.4.0
 
 RUN set -xe \
     && addgroup -g 48 -S apache \
@@ -85,6 +87,8 @@ RUN set -xe \
 #
 # for php extension
          brotli-dev curl-dev libevent-dev libidn2-dev libidn-dev icu-dev libidn-dev libidn2-dev \
+# for decimal
+         mpdecimal-dev \
 #
 # add apk build deps
     && apk add --no-cache --virtual .build-deps \
@@ -108,6 +112,7 @@ RUN set -xe \
     && curl -fSL https://pecl.php.net/get/raphf-$RAPHF_VER.tgz -o raphf.tgz \
     && curl -fSL https://pecl.php.net/get/propro-$PROPRO_VER.tgz -o propro.tgz \
     && curl -fSL https://pecl.php.net/get/pecl_http-$HTTP_VER.tgz -o pecl_http.tgz \
+    && curl -fSL https://pecl.php.net/get/decimal-$DECIMAL_VER.tgz -o decimal.tgz \
 # 
 # Decompress
     && tar -zxvC /usr/src -f igbinary.tgz \
@@ -119,10 +124,11 @@ RUN set -xe \
     && tar -zxvC /usr/src -f raphf.tgz \
     && tar -zxvC /usr/src -f propro.tgz \
     && tar -zxvC /usr/src -f pecl_http.tgz \
+    && tar -zxvC /usr/src -f decimal.tgz \
 #
 # clean pecl compressed packages
     && rm -f igbinary.tgz redis.tgz xdebug.tgz \
-    swoole.tgz mcrypt.tgz mysql.tar.gz raphf.tgz propro.tgz pecl_http.tgz \
+    swoole.tgz mcrypt.tgz mysql.tar.gz raphf.tgz propro.tgz pecl_http.tgz decimal.tgz \
 #
 # Install pecl igbinary
     && cd /usr/src/igbinary-$IGBINARY_VER \
@@ -219,6 +225,15 @@ RUN set -xe \
     && echo "extension=http.so" > ${php_conf_d}z_http.ini \
     && cd .. \
     && rm -rf /usr/src/pecl_http-$HTTP_VER \
+# Install pecl decimal
+    && cd /usr/src/decimal-$DECIMAL_VER \
+    && phpize \
+    && ./configure --enable-decimal \
+    && make -j$(getconf _NPROCESSORS_ONLN) \
+    && make install \
+    && echo "extension=decimal.so" > ${php_conf_d}decimal.ini \
+    && cd .. \
+    && rm -rf /usr/src/decimal-$DECIMAL_VER \
 # composer
     && curl -fSL https://mirrors.aliyun.com/composer/composer.phar -o /usr/src/composer.phar \
     && php /usr/src/composer.phar config -g repo.packagist composer https://mirrors.aliyun.com/composer/ \
