@@ -186,7 +186,7 @@ RUN tar -zxvC /usr/src -f pecl-database-mysql-master.tar.gz \
     && cd .. \
     && rm -rf /usr/src/decimal-$DECIMAL_VER \
 # composer
-    && curl -fSL https://mirrors.aliyun.com/composer/composer.phar -o /usr/src/composer.phar \
+    && curl --retry-all-errors --retry-delay 2 --retry 99 -fSL https://mirrors.aliyun.com/composer/composer.phar -o /usr/src/composer.phar \
     && php /usr/src/composer.phar config -g repo.packagist composer https://mirrors.aliyun.com/composer/ \
 #
 # clean apk build deps

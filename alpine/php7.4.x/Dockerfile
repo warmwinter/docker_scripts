@@ -103,16 +103,16 @@ RUN set -xe \
     && docker-php-ext-install bcmath exif gd intl mysqli pdo_mysql sockets \
 # 
 # Fetch pecl
-    && curl -fSL http://pecl.php.net/get/igbinary-$IGBINARY_VER.tgz -o igbinary.tgz \
-    && curl -fSL http://pecl.php.net/get/redis-$REDIS_VER.tgz -o redis.tgz \
-    && curl -fSL http://pecl.php.net/get/xdebug-$XDEBUG_VER.tgz -o xdebug.tgz \
-    && curl -fSL http://pecl.php.net/get/swoole-$SWOOLE_VER.tgz -o swoole.tgz \
-    && curl -fSL http://pecl.php.net/get/mcrypt-$MCRYPT_VER.tgz -o mcrypt.tgz \
-    && curl -fSL https://github.com/php/pecl-database-mysql/archive/$MYSQL_VER.tar.gz -o mysql.tar.gz \
-    && curl -fSL https://pecl.php.net/get/raphf-$RAPHF_VER.tgz -o raphf.tgz \
-    && curl -fSL https://pecl.php.net/get/propro-$PROPRO_VER.tgz -o propro.tgz \
-    && curl -fSL https://pecl.php.net/get/pecl_http-$HTTP_VER.tgz -o pecl_http.tgz \
-    && curl -fSL https://pecl.php.net/get/decimal-$DECIMAL_VER.tgz -o decimal.tgz \
+    && curl --retry-all-errors --retry-delay 2 --retry 99 -fSL http://pecl.php.net/get/igbinary-$IGBINARY_VER.tgz -o igbinary.tgz \
+    && curl --retry-all-errors --retry-delay 2 --retry 99 -fSL http://pecl.php.net/get/redis-$REDIS_VER.tgz -o redis.tgz \
+    && curl --retry-all-errors --retry-delay 2 --retry 99 -fSL http://pecl.php.net/get/xdebug-$XDEBUG_VER.tgz -o xdebug.tgz \
+    && curl --retry-all-errors --retry-delay 2 --retry 99 -fSL http://pecl.php.net/get/swoole-$SWOOLE_VER.tgz -o swoole.tgz \
+    && curl --retry-all-errors --retry-delay 2 --retry 99 -fSL http://pecl.php.net/get/mcrypt-$MCRYPT_VER.tgz -o mcrypt.tgz \
+    && curl --retry-all-errors --retry-delay 2 --retry 99 -fSL https://github.com/php/pecl-database-mysql/archive/$MYSQL_VER.tar.gz -o mysql.tar.gz \
+    && curl --retry-all-errors --retry-delay 2 --retry 99 -fSL https://pecl.php.net/get/raphf-$RAPHF_VER.tgz -o raphf.tgz \
+    && curl --retry-all-errors --retry-delay 2 --retry 99 -fSL https://pecl.php.net/get/propro-$PROPRO_VER.tgz -o propro.tgz \
+    && curl --retry-all-errors --retry-delay 2 --retry 99 -fSL https://pecl.php.net/get/pecl_http-$HTTP_VER.tgz -o pecl_http.tgz \
+    && curl --retry-all-errors --retry-delay 2 --retry 99 -fSL https://pecl.php.net/get/decimal-$DECIMAL_VER.tgz -o decimal.tgz \
 # 
 # Decompress
     && tar -zxvC /usr/src -f igbinary.tgz \
@@ -235,7 +235,7 @@ RUN set -xe \
     && cd .. \
     && rm -rf /usr/src/decimal-$DECIMAL_VER \
 # composer
-    && curl -fSL https://mirrors.aliyun.com/composer/composer.phar -o /usr/src/composer.phar \
+    && curl --retry-all-errors --retry-delay 2 --retry 99 -fSL https://mirrors.aliyun.com/composer/composer.phar -o /usr/src/composer.phar \
     && php /usr/src/composer.phar config -g repo.packagist composer https://mirrors.aliyun.com/composer/ \
 #
 # clean apk build deps
