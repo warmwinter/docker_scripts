@@ -11,10 +11,11 @@ LABEL Description="PHP v8.1.x Docker" Vendor="Demo Studio" Version="1.0.0"
 ENV php_conf_d /usr/local/etc/php/conf.d/
 
 ENV ALPINE_VERSION 3.15
-ENV IGBINARY_VER 3.2.6
-ENV REDIS_VER 5.3.4
-ENV XDEBUG_VER 3.1.1
-ENV SWOOLE_VER 4.8.2
+ENV IGBINARY_VER 3.2.7
+ENV REDIS_VER 5.3.7
+ENV XDEBUG_VER 3.1.3
+ENV SWOOLE_VER 4.8.8
+ENV DECIMAL_VER 1.4.0
 
 ARG LOCAL_MIRROR=""
 
@@ -74,9 +75,10 @@ RUN set -xe \
         nghttp2-dev hiredis-dev openssl-dev \
 # for pgsql
         postgresql-dev \
-# for swoole extension
-#        libmcrypt-dev \
-# for mcrype extension
+# for swoole / mcrype extension
+        libmcrypt-dev \
+# for decimal
+        mpdecimal-dev \
 #
 # add apk build deps
     && apk add --no-cache --virtual .build-deps \
@@ -114,6 +116,7 @@ RUN tar -zxvC /usr/src -f pecl-database-mysql-master.tar.gz \
     && curl --retry-all-errors --retry-delay 2 --retry 99 -fSL http://pecl.php.net/get/xdebug-$XDEBUG_VER.tgz -o xdebug.tgz \
     && curl --retry-all-errors --retry-delay 2 --retry 99 -fSL http://pecl.php.net/get/swoole-$SWOOLE_VER.tgz -o swoole.tgz \
     # && curl --retry-all-errors --retry-delay 2 --retry 99 -fSL https://github.com/swoole/swoole-src/archive/refs/tags/v${SWOOLE_VER}.tar.gz -o swoole.tar.gz \
+    && curl --retry-all-errors --retry-delay 2 --retry 99 -fSL https://pecl.php.net/get/decimal-$DECIMAL_VER.tgz -o decimal.tgz \
 # 
 # Decompress
     && tar -zxvC /usr/src -f igbinary.tgz \
@@ -122,11 +125,13 @@ RUN tar -zxvC /usr/src -f pecl-database-mysql-master.tar.gz \
     && tar -zxvC /usr/src -f swoole.tgz \
     # && mkdir -p /usr/src/swoole-$SWOOLE_VER \
     # && tar --strip-components=1 -zxvC /usr/src/swoole-$SWOOLE_VER -f swoole.tar.gz \
+    && tar -zxvC /usr/src -f decimal.tgz \
 #
 # clean pecl compressed packages
     && rm -f igbinary.tgz redis.tgz xdebug.tgz \
-    #swoole.tgz \
-    swoole.tar.gz \
+    swoole.tgz \
+    # swoole.tar.gz \
+    decimal.tgz \
 #
 # Install pecl igbinary
     && cd /usr/src/igbinary-$IGBINARY_VER \
@@ -171,6 +176,18 @@ RUN tar -zxvC /usr/src -f pecl-database-mysql-master.tar.gz \
     && echo "extension=swoole.so" > ${php_conf_d}swoole.ini \
     && cd .. \
     && rm -rf /usr/src/swoole-$SWOOLE_VER \
+# Install pecl decimal
+    && cd /usr/src/decimal-$DECIMAL_VER \
+    && phpize \
+    && ./configure --enable-decimal \
+    && make -j$(getconf _NPROCESSORS_ONLN) \
+    && make install \
+    && echo "extension=decimal.so" > ${php_conf_d}decimal.ini \
+    && cd .. \
+    && rm -rf /usr/src/decimal-$DECIMAL_VER \
+# composer
+    && curl -fSL https://mirrors.aliyun.com/composer/composer.phar -o /usr/src/composer.phar \
+    && php /usr/src/composer.phar config -g repo.packagist composer https://mirrors.aliyun.com/composer/ \
 #
 # clean apk build deps
     && apk del .build-deps
