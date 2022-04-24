@@ -12,9 +12,10 @@ ENV php_conf_d /usr/local/etc/php/conf.d/
 ENV ALPINE_VERSION 3.15
 ENV IGBINARY_VER 3.2.7
 ENV REDIS_VER 5.3.7
-ENV XDEBUG_VER 3.1.3
-ENV SWOOLE_VER 4.8.8
+ENV XDEBUG_VER 3.1.4
+ENV SWOOLE_VER 4.8.9
 ENV MCRYPT_VER 1.0.4
+# https://github.com/php/pecl-database-mysql
 ENV MYSQL_VER master
 # http extension v4.x only PHP 8;
 # NEED raphf and propro extension, 

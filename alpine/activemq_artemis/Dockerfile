@@ -22,7 +22,7 @@ ENV ALPINE_VERSION="3.15" \
 ARG LOCAL_MIRROR=""
 
 # Broker info
-ENV ARTEMIS_VERSION=2.20.0 \
+ENV ARTEMIS_VERSION=2.21.0 \
     ARTEMIS_HOME="${BASE_DIR}/artemis" \
     BROKER_HOME="${BASE_DIR}/brokers" \
     BROKER_DIR="mainBroker" \
@@ -64,7 +64,8 @@ RUN set -xe \
 RUN set -xe; \
     \
     if [ -z "$LOCAL_MIRROR" ]; then \
-        ${CURL_CMD} "https://www.apache.org/dyn/closer.cgi?filename=activemq/activemq-artemis/${ARTEMIS_VERSION}/apache-artemis-${ARTEMIS_VERSION}-bin.tar.gz&action=download" -o artemis.tar.gz; \
+#        ${CURL_CMD} "https://www.apache.org/dyn/closer.cgi?filename=activemq/activemq-artemis/${ARTEMIS_VERSION}/apache-artemis-${ARTEMIS_VERSION}-bin.tar.gz&action=download" -o artemis.tar.gz; \
+         ${CURL_CMD}} https://dlcdn.apache.org/activemq/activemq-artemis/${ARTEMIS_VERSION}/apache-artemis-${ARTEMIS_VERSION}-bin.tar.gz -o artemis.tar.gz; \
     else \
         ${CURL_CMD} "https://mirrors.inproc.top/apache-artemis-${ARTEMIS_VERSION}-bin.tar.gz" -o artemis.tar.gz; \
     fi; \
