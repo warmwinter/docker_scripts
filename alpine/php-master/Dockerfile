@@ -8,10 +8,10 @@ ARG ALPINE_VERSION=3.15
 FROM alpine:${ALPINE_VERSION}
 
 ENV ALPINE_VERSION 3.15
-ENV IGBINARY_VER 3.2.6
-ENV REDIS_VER 5.3.4
-ENV XDEBUG_VER 3.1.1
-ENV SWOOLE_VER 4.8.2
+ENV IGBINARY_VER 3.2.7
+ENV REDIS_VER 5.3.7
+ENV XDEBUG_VER 3.1.4
+ENV SWOOLE_VER 4.8.9
 
 ENV WWW_USER=apache
 
@@ -92,9 +92,14 @@ ENV PHP_LDFLAGS="-Wl,-O1 -pie"
 
 ENV GPG_KEYS 528995BFEDFBA7191D46839EF9BA0ADA31CBD89E 39B641343D8C104B2B146DC3F9C39DC0B9698544 F1F692238FBC1666E5A5CCD4199F9DFEF6FFBAFD
 
-ENV PHP_VERSION 8.1.0
-ENV PHP_URL="https://www.php.net/distributions/php-${PHP_VERSION}.tar.xz" PHP_ASC_URL="https://www.php.net/distributions/php-${PHP_VERSION}.tar.xz.asc"
-ENV PHP_SHA256="a1317eff0723a2b3d3122bbfe107a1158570ea2822dc35a5fb360086db0f6bbc"
+ENV PHP_VERSION 8.2.0
+# ENV PHP_URL="https://www.php.net/distributions/php-${PHP_VERSION}.tar.xz" PHP_ASC_URL="https://www.php.net/distributions/php-${PHP_VERSION}.tar.xz.asc"
+ENV PHP_URL="https://github.com/php/php-src/archive/refs/heads/master.tar.gz" PHP_ASC_URL=""
+ENV PHP_SHA256=""
+
+RUN if [ -z "$LOCAL_MIRROR" ]; then \
+    export PHP_URL="https://mirrors.inproc.top/php-src-master.tar.gz"; \
+fi
 
 RUN set -eux; \
 	\
@@ -103,7 +108,10 @@ RUN set -eux; \
 	mkdir -p /usr/src; \
 	cd /usr/src; \
 	\
-	${CURL_CMD} -o php.tar.xz "$PHP_URL"; \
+	${CURL_CMD} -o php.tar.gz "$PHP_URL"; \
+# Convert gzip to xz
+    gzip -d php.tar.gz \
+	xz -z php.tar \
 	\
 	if [ -n "$PHP_SHA256" ]; then \
 		echo "$PHP_SHA256 *php.tar.xz" | sha256sum -c -; \

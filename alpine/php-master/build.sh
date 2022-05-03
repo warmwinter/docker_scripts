@@ -10,7 +10,7 @@ fi
 CMD='/usr/bin/docker'
 IMAGEREPO='php-master'
 IMAGETAG='alpine'
-FPMPORT=8000
+FPMPORT=8200
 
 # enter the path that exist the shell script.
 MYFULLPATH=`/usr/bin/realpath $0`
@@ -48,7 +48,7 @@ fi
 
 # rebuild image
 
-$CMD build --force-rm --pull --rm --tag $IMAGEREPO:$IMAGETAG . 
+$CMD build --build-arg LOCAL_MIRROR=true --force-rm --pull --rm --tag $IMAGEREPO:$IMAGETAG . 
 
 # check the buliding result
 
