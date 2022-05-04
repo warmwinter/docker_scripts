@@ -259,7 +259,7 @@ RUN set -eux; \
 	)"; \
 	apk add --no-cache $runDeps; \
 	\
-	apk del --no-network .build-deps; \
+	# apk del --no-network .build-deps; \
 	\
 # update pecl channel definitions https://github.com/docker-library/php/issues/443
 	pecl update-channels; \
@@ -350,7 +350,11 @@ RUN ${CURL_CMD} http://pecl.php.net/get/igbinary-$IGBINARY_VER.tgz -o igbinary.t
     rm -rf /usr/src/decimal-$DECIMAL_VER; \
 # composer
     curl --retry-all-errors --retry-delay 2 --retry 99 -fSL https://mirrors.aliyun.com/composer/composer.phar -o /usr/src/composer.phar; \
-    php /usr/src/composer.phar config -g repo.packagist composer https://mirrors.aliyun.com/composer/
+    php /usr/src/composer.phar config -g repo.packagist composer https://mirrors.aliyun.com/composer/; \
+	\
+# clean php dependency package
+	apk del --no-network .build-deps
+
 
 
 ENTRYPOINT ["docker-php-entrypoint"]
