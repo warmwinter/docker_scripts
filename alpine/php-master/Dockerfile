@@ -60,7 +60,23 @@ RUN apk add --no-cache \
 		tar \
 		xz \
 # https://github.com/docker-library/php/issues/494
-		openssl
+		openssl \
+# for gd
+		zlib-dev \
+		libpng-dev \
+		libavif-dev \
+		libwebp-dev \
+		libjpeg-turbo-dev \
+		libxpm-dev \
+		freetype-dev \
+# for intl
+		icu-dev \
+# for postgresql
+        libpq-dev \
+# for ffi
+		libffi-dev \
+# for Decimal
+		mpdecimal-dev
 
 # ensure ${WWW_USER} user exists
 RUN set -eux; \
@@ -150,26 +166,10 @@ RUN set -eux; \
 		openssl-dev \
 		readline-dev \
 		sqlite-dev \
-# for gd
-		zlib-dev \
-		libpng-dev \
-		libavif-dev \
-		libwebp-dev \
-		libjpeg-turbo-dev \
-		libxpm-dev \
-		freetype-dev \
-# for intl
-		icu-dev \
-# for postgresql
-        libpq-dev \
-# for ffi
-		libffi-dev \
-# for Decimal
-		mpdecimal-dev \
 	; \
 	\
 # make sure musl's iconv doesn't get used (https://www.php.net/manual/en/intro.iconv.php)
-	rm -vf /usr/include/iconv.h; \
+	# rm -vf /usr/include/iconv.h; \
 	\
 	export \
 		CFLAGS="$PHP_CFLAGS" \
