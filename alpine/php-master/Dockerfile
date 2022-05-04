@@ -31,7 +31,8 @@ ENV PHPIZE_DEPS \
 		libc-dev \
 		make \
 		pkgconf \
-		re2c
+		re2c \
+		bison
 
 RUN set -eux; \
 # Change alpine mirror to demostic
@@ -96,10 +97,7 @@ ENV PHP_VERSION 8.2.0
 # ENV PHP_URL="https://www.php.net/distributions/php-${PHP_VERSION}.tar.xz" PHP_ASC_URL="https://www.php.net/distributions/php-${PHP_VERSION}.tar.xz.asc"
 ENV PHP_URL="https://github.com/php/php-src/archive/refs/heads/master.tar.gz" PHP_ASC_URL=""
 ENV PHP_SHA256=""
-
-RUN if [ -z "$LOCAL_MIRROR" ]; then \
-    export PHP_URL="https://mirrors.inproc.top/php-src-master.tar.gz"; \
-fi
+ENV PHP_URL_MIRROR="https://mirrors.inproc.top/php-src-master.tar.gz"
 
 RUN set -eux; \
 	\
@@ -108,10 +106,16 @@ RUN set -eux; \
 	mkdir -p /usr/src; \
 	cd /usr/src; \
 	\
-	${CURL_CMD} -o php.tar.gz "$PHP_URL"; \
+	if [ -n "$LOCAL_MIRROR" ]; then \
+	    ${CURL_CMD} -o php.tar.gz "$PHP_URL_MIRROR"; \
+	else \
+	    ${CURL_CMD} -o php.tar.gz "$PHP_URL"; \
+	fi; \
+	\
 # Convert gzip to xz
-    gzip -d php.tar.gz \
-	xz -z php.tar \
+    gzip -d php.tar.gz; \
+	xz -z php.tar; \
+	ls -lh; \
 	\
 	if [ -n "$PHP_SHA256" ]; then \
 		echo "$PHP_SHA256 *php.tar.xz" | sha256sum -c -; \
@@ -138,6 +142,7 @@ RUN set -eux; \
 		argon2-dev \
 		coreutils \
 		curl-dev \
+		gnu-libiconv-dev \
 		libsodium-dev \
 		libxml2-dev \
 		linux-headers \
@@ -145,7 +150,22 @@ RUN set -eux; \
 		openssl-dev \
 		readline-dev \
 		sqlite-dev \
+# for gd
+		zlib-dev \
+		libpng-dev \
+		libavif-dev \
+		libwebp-dev \
+		libjpeg-turbo-dev \
+		libxpm-dev \
+		freetype-dev \
+# for intl
+		icu-dev \
+# for postgresql
+        libpq-dev \
 	; \
+	\
+# make sure musl's iconv doesn't get used (https://www.php.net/manual/en/intro.iconv.php)
+	rm -vf /usr/include/iconv.h; \
 	\
 	export \
 		CFLAGS="$PHP_CFLAGS" \
@@ -155,6 +175,9 @@ RUN set -eux; \
 	docker-php-source extract; \
 	cd /usr/src/php; \
 	gnuArch="$(dpkg-architecture --query DEB_BUILD_GNU_TYPE)"; \
+# Generate configure
+    ./buildconf; \
+	\
 	./configure \
 		--build="$gnuArch" \
 		--with-config-file-path="$PHP_INI_DIR" \
@@ -184,9 +207,13 @@ RUN set -eux; \
 		--with-sqlite3=/usr \
 		\
 		--with-curl \
+		--with-iconv=/usr \
 		--with-openssl \
 		--with-readline \
 		--with-zlib \
+		\
+# https://github.com/bwoebi/phpdbg-docs/issues/1#issuecomment-163872806 ("phpdbg is primarily a CLI debugger, and is not suitable for debugging an fpm stack.")
+		--disable-phpdbg \
 		\
 # in PHP 7.4+, the pecl/pear installers are officially deprecated (requiring an explicit "--with-pear")
 		--with-pear \
@@ -241,6 +268,11 @@ COPY docker-php-ext-* docker-php-entrypoint /usr/local/bin/
 
 # sodium was built as a shared module (so that it can be replaced later if so desired), so let's enable it too (https://github.com/docker-library/php/issues/598)
 RUN docker-php-ext-enable sodium
+
+# Install more official extensions
+RUN docker-php-ext-configure gd --with-avif --with-webp --with-jpeg \
+        --with-xpm --with-freetype --enable-gd-jis-conv; \
+	docker-php-ext-install exif gd intl mysqli pdo_mysql sockets pdo_pgsql pgsql
 
 ENTRYPOINT ["docker-php-entrypoint"]
 WORKDIR /var/www/html
