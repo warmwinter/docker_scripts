@@ -377,7 +377,7 @@ RUN set -eux; \
 	fi; \
 	{ \
 		echo '[global]'; \
-		echo 'error_log = /proc/self/fd/2'; \
+		echo 'error_log = /var/log/php-fpm/php-fpm.log'; \
 		echo; echo '; https://github.com/docker-library/php/pull/725#issuecomment-443540114'; echo 'log_limit = 8192'; \
 		echo; \
 		echo '[www]'; \
@@ -389,6 +389,12 @@ RUN set -eux; \
 		echo '; Ensure worker stdout and stderr are sent to the main error log.'; \
 		echo 'catch_workers_output = yes'; \
 		echo 'decorate_workers_output = no'; \
+		echo; \
+		echo '; new log settings'; \
+		echo 'slowlog = /var/log/php-fpm/www_slow.log'; \
+		echo 'request_slowlog_timeout = 2s'; \
+		echo 'php_admin_value[error_log] = /var/log/php-fpm/www_error.log'; \
+		echo 'php_admin_flag[log_errors] = on'; \
 	} | tee php-fpm.d/docker.conf; \
 	{ \
 		echo '[global]'; \
@@ -396,7 +402,15 @@ RUN set -eux; \
 		echo; \
 		echo '[www]'; \
 		echo 'listen = 9000'; \
-	} | tee php-fpm.d/zz-docker.conf
+	} | tee php-fpm.d/zz-docker.conf; \
+	{ \
+	    echo 'expose_php = Off'; \
+		echo 'error_log = /var/log/php-fpm/php_errors.log'; \
+		echo 'variables_order = "GPCS"'; \
+		echo 'request_order = "GP"'; \
+		echo 'upload_max_filesize = 8M'; \
+		echo 'date.timezone = ASIA/SHANGHAI'; \
+	} | tee php/conf.d/docker-vars.ini
 
 # Override stop signal to stop process gracefully
 # https://github.com/php/php-src/blob/17baa87faddc2550def3ae7314236826bc1b1398/sapi/fpm/php-fpm.8.in#L163
