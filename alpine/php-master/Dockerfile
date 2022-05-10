@@ -280,7 +280,8 @@ RUN docker-php-ext-configure gd --with-avif --with-webp --with-jpeg \
 	    bcmath calendar ffi opcache
 
 # Install third party extensions
-RUN ${CURL_CMD} http://pecl.php.net/get/igbinary-$IGBINARY_VER.tgz -o igbinary.tgz; \
+RUN EXT_DIR="$(php -d 'display_errors=stderr' -r 'echo ini_get("extension_dir");')"; \
+    ${CURL_CMD} http://pecl.php.net/get/igbinary-$IGBINARY_VER.tgz -o igbinary.tgz; \
     ${CURL_CMD} http://pecl.php.net/get/redis-$REDIS_VER.tgz -o redis.tgz; \
 	${CURL_CMD} http://pecl.php.net/get/xdebug-$XDEBUG_VER.tgz -o xdebug.tgz; \
 	${CURL_CMD} http://pecl.php.net/get/swoole-$SWOOLE_VER.tgz -o swoole.tgz; \
@@ -305,6 +306,7 @@ RUN ${CURL_CMD} http://pecl.php.net/get/igbinary-$IGBINARY_VER.tgz -o igbinary.t
     echo "extension=igbinary.so" > ${php_conf_d}igbinary.ini; \
     cd ..; \
     rm -rf /usr/src/igbinary-$IGBINARY_VER; \
+	strip --strip-all ${EXT_DIR}/igbinary.so; \
 	\
 # Install pecl phpredis
     cd /usr/src/redis-$REDIS_VER; \
@@ -315,20 +317,24 @@ RUN ${CURL_CMD} http://pecl.php.net/get/igbinary-$IGBINARY_VER.tgz -o igbinary.t
     echo "extension=redis.so" > ${php_conf_d}redis.ini; \
     cd ..; \
     rm -rf /usr/src/redis-$REDIS_VER; \
-#
+	strip --strip-all ${EXT_DIR}/redis.so; \
+	\
 # Install xdebug
     # cd /usr/src/xdebug-$XDEBUG_VER; \
     # phpize; \
     # ./configure --enable-xdebug; \
     # make -j$(getconf _NPROCESSORS_ONLN); \
     # make install; \
-    # echo "zend_extension=xdebug.so" > ${php_conf_d}xdebug.ini; \
-    # echo "xdebug.mode=develop,debug" >> ${php_conf_d}xdebug.ini; \
-    # echo "xdebug.discover_client_host = true" >> ${php_conf_d}xdebug.ini; \
-    # echo "xdebug.idekey = \"PHPSTORM\"" >> ${php_conf_d}xdebug.ini; \
+	# { \
+	#     echo 'zend_extension=xdebug.so'; \
+	# 	echo 'xdebug.mode=develop,debug'; \
+	# 	echo 'xdebug.discover_client_host = true'; \
+	# 	echo 'xdebug.idekey = "PHPSTORM"'; \
+	# } | tee ${php_conf_d}xdebug.ini; \
     # cd ..; \
     # rm -rf /usr/src/xdebug-$XDEBUG_VER; \
-#
+	# strip --strip-all ${EXT_DIR}/xdebug.so; \
+	\
 # Install swoole
     cd /usr/src/swoole-$SWOOLE_VER; \
     phpize; \
@@ -339,6 +345,8 @@ RUN ${CURL_CMD} http://pecl.php.net/get/igbinary-$IGBINARY_VER.tgz -o igbinary.t
     echo "extension=swoole.so" > ${php_conf_d}swoole.ini; \
     cd ..; \
     rm -rf /usr/src/swoole-$SWOOLE_VER; \
+	strip --strip-all ${EXT_DIR}/swoole.so; \
+	\
 # Install pecl decimal
     cd /usr/src/decimal-$DECIMAL_VER; \
     phpize; \
@@ -348,6 +356,8 @@ RUN ${CURL_CMD} http://pecl.php.net/get/igbinary-$IGBINARY_VER.tgz -o igbinary.t
     echo "extension=decimal.so" > ${php_conf_d}decimal.ini; \
     cd ..; \
     rm -rf /usr/src/decimal-$DECIMAL_VER; \
+	strip --strip-all ${EXT_DIR}/decimal.so; \
+	\
 # composer
     curl --retry-all-errors --retry-delay 2 --retry 99 -fSL https://mirrors.aliyun.com/composer/composer.phar -o /usr/src/composer.phar; \
     php /usr/src/composer.phar config -g repo.packagist composer https://mirrors.aliyun.com/composer/; \
