@@ -303,7 +303,7 @@ RUN EXT_DIR="$(php -d 'display_errors=stderr' -r 'echo ini_get("extension_dir");
     ./configure --enable-igbinary; \
     make -j$(getconf _NPROCESSORS_ONLN); \
     make install; \
-    echo "extension=igbinary.so" > ${php_conf_d}igbinary.ini; \
+    echo "extension=igbinary.so" > ${PHP_CONF_D}igbinary.ini; \
     cd ..; \
     rm -rf /usr/src/igbinary-$IGBINARY_VER; \
 	strip --strip-all ${EXT_DIR}/igbinary.so; \
@@ -314,7 +314,7 @@ RUN EXT_DIR="$(php -d 'display_errors=stderr' -r 'echo ini_get("extension_dir");
     ./configure --enable-redis --enable-redis-igbinary; \
     make -j$(getconf _NPROCESSORS_ONLN); \
     make install; \
-    echo "extension=redis.so" > ${php_conf_d}redis.ini; \
+    echo "extension=redis.so" > ${PHP_CONF_D}redis.ini; \
     cd ..; \
     rm -rf /usr/src/redis-$REDIS_VER; \
 	strip --strip-all ${EXT_DIR}/redis.so; \
@@ -330,7 +330,7 @@ RUN EXT_DIR="$(php -d 'display_errors=stderr' -r 'echo ini_get("extension_dir");
 	# 	echo 'xdebug.mode=develop,debug'; \
 	# 	echo 'xdebug.discover_client_host = true'; \
 	# 	echo 'xdebug.idekey = "PHPSTORM"'; \
-	# } | tee ${php_conf_d}xdebug.ini; \
+	# } | tee ${PHP_CONF_D}xdebug.ini; \
     # cd ..; \
     # rm -rf /usr/src/xdebug-$XDEBUG_VER; \
 	# strip --strip-all ${EXT_DIR}/xdebug.so; \
@@ -342,7 +342,7 @@ RUN EXT_DIR="$(php -d 'display_errors=stderr' -r 'echo ini_get("extension_dir");
         --enable-http2 --enable-swoole --enable-mysqlnd; \
     make -j$(getconf _NPROCESSORS_ONLN); \
     make install; \
-    echo "extension=swoole.so" > ${php_conf_d}swoole.ini; \
+    echo "extension=swoole.so" > ${PHP_CONF_D}swoole.ini; \
     cd ..; \
     rm -rf /usr/src/swoole-$SWOOLE_VER; \
 	strip --strip-all ${EXT_DIR}/swoole.so; \
@@ -353,7 +353,7 @@ RUN EXT_DIR="$(php -d 'display_errors=stderr' -r 'echo ini_get("extension_dir");
     ./configure --enable-decimal; \
     make -j$(getconf _NPROCESSORS_ONLN); \
     make install; \
-    echo "extension=decimal.so" > ${php_conf_d}decimal.ini; \
+    echo "extension=decimal.so" > ${PHP_CONF_D}decimal.ini; \
     cd ..; \
     rm -rf /usr/src/decimal-$DECIMAL_VER; \
 	strip --strip-all ${EXT_DIR}/decimal.so; \
