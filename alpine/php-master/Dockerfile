@@ -415,6 +415,8 @@ RUN set -eux; \
 	} | tee php-fpm.d/zz-docker.conf; \
 	{ \
 	    echo 'expose_php = Off'; \
+		echo 'display_errors = Off'; \
+		echo 'log_errors = On'; \
 		echo 'error_log = /var/log/php-fpm/php_errors.log'; \
 		echo 'variables_order = "GPCS"'; \
 		echo 'request_order = "GP"'; \
