@@ -73,6 +73,7 @@ RUN set -xe \
     && echo $LOCAL_MIRROR \
     && echo $MODE \
     && pwd \
+# telnet in busybox-extras package
 #
 # install rocksdb
 # https://github.com/facebook/rocksdb/blob/main/INSTALL.md
