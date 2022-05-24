@@ -8,12 +8,12 @@
 # https://github.com/alpinelinux/docker-alpine
 # https://pkgs.alpinelinux.org/
 
-FROM alpine:3.15
+FROM alpine:3.16
 
 LABEL Description="Nacos Docker" Vendor="Demo Studio" Version="1.0.0"
 
 # set environment
-ENV ALPINE_VERSION="3.15" \
+ENV ALPINE_VERSION="3.16" \
     MODE="cluster" \
     PREFER_HOST_MODE="ip"\
     BASE_DIR="/home/nacos" \
