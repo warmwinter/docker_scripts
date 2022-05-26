@@ -2,14 +2,14 @@
 
 # https://hub.docker.com/_/php?tab=tags&page=1&name=fpm-alpine
 
-FROM php:7.4-fpm-alpine3.15
+FROM php:7.4-fpm-alpine3.16
 
 LABEL Description="PHP v7.4.x Docker" Vendor="Demo Studio" Version="1.0.0"
 
 # Some Enviroment
 ENV php_conf_d /usr/local/etc/php/conf.d/
 
-ENV ALPINE_VERSION 3.15
+ENV ALPINE_VERSION 3.16
 ENV IGBINARY_VER 3.2.7
 ENV REDIS_VER 5.3.7
 ENV XDEBUG_VER 3.1.4
