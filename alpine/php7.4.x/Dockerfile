@@ -99,7 +99,7 @@ RUN set -xe \
 # Create source dolder
     && mkdir -p /usr/src \
 # Install exif gd intl mysqli pdo_mysql sockets
-    && docker-php-ext-configure gd --enable-gd --with-external-gd --with-webp \
+    && docker-php-ext-configure gd --enable-gd --with-external-gd=no --with-webp \
         --with-jpeg --with-xpm --with-freetype --enable-gd-jis-conv --with-pic \
     && docker-php-ext-install bcmath exif gd intl mysqli pdo_mysql sockets \
 # 
