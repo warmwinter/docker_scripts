@@ -168,7 +168,7 @@ RUN set -xe; \
         echo "xdebug.mode=develop,debug"; \
         echo "xdebug.discover_client_host = true"; \
         echo "xdebug.idekey = \"PHPSTORM\""; \
-    } tee  ${PHP_CONF_D}xdebug.ini; \
+    } | tee  ${PHP_CONF_D}xdebug.ini; \
     cd ..; \
     rm -rf /usr/src/xdebug-$XDEBUG_VER; \
 #
