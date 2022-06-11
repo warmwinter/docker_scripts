@@ -87,6 +87,8 @@ RUN set -xe; \
         libmcrypt-dev \
 # for decimal
         mpdecimal-dev \
+# for sockets
+    linux-headers \
     ; \
 #
 # add apk build deps
@@ -158,30 +160,30 @@ RUN set -xe; \
     rm -rf /usr/src/redis-$REDIS_VER; \
 #
 # Install xdebug
-    cd /usr/src/xdebug-$XDEBUG_VER; \
-    phpize; \
-    ./configure --enable-xdebug; \
-    make -j$(getconf _NPROCESSORS_ONLN); \
-    make install; \
-    { \
-        echo "zend_extension=xdebug.so"; \
-        echo "xdebug.mode=develop,debug"; \
-        echo "xdebug.discover_client_host = true"; \
-        echo "xdebug.idekey = \"PHPSTORM\""; \
-    } | tee  ${PHP_CONF_D}xdebug.ini; \
-    cd ..; \
-    rm -rf /usr/src/xdebug-$XDEBUG_VER; \
+    # cd /usr/src/xdebug-$XDEBUG_VER; \
+    # phpize; \
+    # ./configure --enable-xdebug; \
+    # make -j$(getconf _NPROCESSORS_ONLN); \
+    # make install; \
+    # { \
+    #     echo "zend_extension=xdebug.so"; \
+    #     echo "xdebug.mode=develop,debug"; \
+    #     echo "xdebug.discover_client_host = true"; \
+    #     echo "xdebug.idekey = \"PHPSTORM\""; \
+    # } | tee  ${PHP_CONF_D}xdebug.ini; \
+    # cd ..; \
+    # rm -rf /usr/src/xdebug-$XDEBUG_VER; \
 #
 # Install swoole
-    cd /usr/src/swoole-$SWOOLE_VER; \
-    phpize; \
-    ./configure --enable-sockets --enable-openssl \
-        --enable-http2 --enable-swoole --enable-mysqlnd; \
-    make -j$(getconf _NPROCESSORS_ONLN); \
-    make install; \
-    echo "extension=swoole.so" > ${PHP_CONF_D}swoole.ini; \
-    cd ..; \
-    rm -rf /usr/src/swoole-$SWOOLE_VER; \
+    # cd /usr/src/swoole-$SWOOLE_VER; \
+    # phpize; \
+    # ./configure --enable-sockets --enable-openssl \
+    #     --enable-http2 --enable-swoole --enable-mysqlnd; \
+    # make -j$(getconf _NPROCESSORS_ONLN); \
+    # make install; \
+    # echo "extension=swoole.so" > ${PHP_CONF_D}swoole.ini; \
+    # cd ..; \
+    # rm -rf /usr/src/swoole-$SWOOLE_VER; \
 # Install pecl decimal
     cd /usr/src/decimal-$DECIMAL_VER; \
     phpize; \
