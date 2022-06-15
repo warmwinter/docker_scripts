@@ -103,7 +103,7 @@ RUN set -xe; \
     docker-php-ext-configure gd --with-avif --with-webp --with-jpeg \
         --with-xpm --with-freetype --enable-gd-jis-conv; \
 # Install exif gd intl mysqli pdo_mysql sockets
-    docker-php-ext-install exif gd intl mysqli pdo_mysql sockets pdo_pgsql pgsql; \
+    docker-php-ext-install bcmath exif gd intl mysqli pdo_mysql sockets pdo_pgsql pgsql; \
 # 
 # Install mysql
     if [ -z "$LOCAL_MIRROR" ]; then \
