@@ -22,7 +22,7 @@ ENV ALPINE_VERSION="3.16" \
 ARG LOCAL_MIRROR=""
 
 # Broker info
-ENV ARTEMIS_VERSION=2.22.0 \
+ENV ARTEMIS_VERSION=2.23.1 \
     ARTEMIS_HOME="${BASE_DIR}/artemis" \
     BROKER_HOME="${BASE_DIR}/brokers" \
     BROKER_DIR="mainBroker" \
