@@ -12,6 +12,8 @@ FROM alpine:3.16
 
 LABEL Description="Nacos Docker" Vendor="Demo Studio" Version="1.0.0"
 
+# apk add mysql-client mariadb-connector-c
+
 # set environment
 ENV ALPINE_VERSION="3.16" \
     MODE="cluster" \
