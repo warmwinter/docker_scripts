@@ -3,7 +3,7 @@
 # https://hub.docker.com/_/php?tab=tags&page=1&name=fpm-alpine
 # docker pull php:8.1.0beta1-fpm-alpine3.14
 
-FROM php:8.2.0RC5-fpm-alpine3.16
+FROM php:8.2.0RC6-fpm-alpine3.16
 
 LABEL Description="PHP v8.2.x Docker" Vendor="Demo Studio" Version="1.0.0"
 
@@ -11,10 +11,10 @@ LABEL Description="PHP v8.2.x Docker" Vendor="Demo Studio" Version="1.0.0"
 ENV PHP_CONF_D /usr/local/etc/php/conf.d/
 
 ENV ALPINE_VERSION 3.16
-ENV IGBINARY_VER 3.2.7
+ENV IGBINARY_VER 3.2.12
 ENV REDIS_VER 5.3.7
-ENV XDEBUG_VER 3.2.0RC1
-ENV SWOOLE_VER 5.0.0
+ENV XDEBUG_VER 3.2.0RC6
+ENV SWOOLE_VER 5.0.1
 ENV DECIMAL_VER 1.4.0
 
 ENV CURL_CMD="curl --retry-all-errors --retry-delay 2 --retry 99 -fSL"

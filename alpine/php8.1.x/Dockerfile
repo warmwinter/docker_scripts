@@ -11,10 +11,10 @@ LABEL Description="PHP v8.1.x Docker" Vendor="Demo Studio" Version="1.0.0"
 ENV php_conf_d /usr/local/etc/php/conf.d/
 
 ENV ALPINE_VERSION 3.16
-ENV IGBINARY_VER 3.2.7
+ENV IGBINARY_VER 3.2.12
 ENV REDIS_VER 5.3.7
-ENV XDEBUG_VER 3.2.0alpha2
-ENV SWOOLE_VER 5.0.0
+ENV XDEBUG_VER 3.2.0alpha6
+ENV SWOOLE_VER 5.0.1
 ENV DECIMAL_VER 1.4.0
 
 ARG LOCAL_MIRROR=""
