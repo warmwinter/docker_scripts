@@ -13,7 +13,7 @@ ENV php_conf_d /usr/local/etc/php/conf.d/
 ENV ALPINE_VERSION 3.16
 ENV IGBINARY_VER 3.2.12
 ENV REDIS_VER 5.3.7
-ENV XDEBUG_VER 3.2.0alpha6
+ENV XDEBUG_VER 3.2.0RC2
 ENV SWOOLE_VER 5.0.1
 ENV DECIMAL_VER 1.4.0
 
@@ -79,6 +79,8 @@ RUN set -xe \
         libmcrypt-dev \
 # for decimal
         mpdecimal-dev \
+# for linux-header
+        linux-headers \
 #
 # add apk build deps
     && apk add --no-cache --virtual .build-deps \
