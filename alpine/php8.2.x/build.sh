@@ -47,6 +47,7 @@ if [ $IMAGECNT -ge 2 ]; then
 fi
 
 # rebuild image
+# https://docs.docker.com/reference/
 
 $CMD build --build-arg LOCAL_MIRROR=true --force-rm --pull --rm --tag $IMAGEREPO:$IMAGETAG . 
 
@@ -61,7 +62,7 @@ echo "Build image success"
 
 # rebuild the container
 
-$CMD run --detach --interactive --name $IMAGEREPO-$IMAGETAG --privileged --publish 127.0.0.1:${LISTEN_PORT}:9000 --restart unless-stopped --tty --volume /web/wwwroot:/web/wwwroot:rw --volume /web/docker/logs/${IMAGEREPO}:/var/log/php-fpm:rw $IMAGEREPO:$IMAGETAG  
+$CMD run --detach --interactive --name $IMAGEREPO-$IMAGETAG --privileged --publish 127.0.0.1:${LISTEN_PORT}:9000 --restart unless-stopped --tty --dns=223.5.5.5 --dns=223.6.6.6 --volume /web/wwwroot:/web/wwwroot:rw --volume /web/docker/logs/${IMAGEREPO}:/var/log/php-fpm:rw $IMAGEREPO:$IMAGETAG  
 
 # check the running result
 
