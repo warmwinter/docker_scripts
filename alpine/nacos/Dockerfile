@@ -71,7 +71,7 @@ RUN set -xe \
     && date \
 # 
     && apk upgrade \
-    && apk add --no-cache bash openjdk8 wget iputils netcat-openbsd vim libcurl \
+    && apk add --no-cache bash openjdk17 wget iputils netcat-openbsd vim libcurl \
     && echo $LOCAL_MIRROR \
     && echo $MODE \
     && pwd \
