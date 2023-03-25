@@ -68,7 +68,7 @@ echo "Build image success"
 # 5672 - AMQP
 # 1883 - MQTT
 # 61613 - STOMP
-$CMD run --detach --interactive --name $IMAGEREPO-$IMAGETAG --privileged --publish 8161:8161 --publish 9404:9404 --publish 61616:61616 --publish 5445:5445 --publish 5672:5672 --publish 1883:1883 --publish 61613:61613 --restart unless-stopped --tty $IMAGEREPO:$IMAGETAG  
+$CMD run --detach --interactive --name $IMAGEREPO-$IMAGETAG --privileged --publish 8161:8161 --publish 9404:9404 --publish 61616:61616 --publish 5445:5445 --publish 5672:5672 --publish 1883:1883 --publish 61613:61613 --restart unless-stopped --tty --dns=223.5.5.5 --dns=223.6.6.6 $IMAGEREPO:$IMAGETAG  
 
 # check the running result
 
