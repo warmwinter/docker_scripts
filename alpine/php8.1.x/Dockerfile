@@ -81,6 +81,8 @@ RUN set -xe \
         mpdecimal-dev \
 # for linux-header
         linux-headers \
+# for zip
+        libzip-dev \
 #
 # add apk build deps
     && apk add --no-cache --virtual .build-deps \

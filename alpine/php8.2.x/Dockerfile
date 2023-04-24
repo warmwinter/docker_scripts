@@ -89,6 +89,8 @@ RUN set -xe; \
         mpdecimal-dev \
 # for sockets
     linux-headers \
+# for zip extension
+    libzip-dev \
     ; \
 #
 # add apk build deps
