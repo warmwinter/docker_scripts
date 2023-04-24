@@ -93,7 +93,7 @@ RUN set -xe \
     &&  docker-php-ext-configure gd --with-avif --with-webp --with-jpeg \
         --with-xpm --with-freetype --enable-gd-jis-conv \
 # Install exif gd intl mysqli pdo_mysql sockets
-    && docker-php-ext-install bcmath exif gd intl mysqli pdo_mysql sockets pdo_pgsql pgsql
+    && docker-php-ext-install bcmath exif gd intl mysqli pdo_mysql sockets pdo_pgsql pgsql zip
 # 
 # Install mysql
 RUN if [ -z "$LOCAL_MIRROR" ]; then \
@@ -190,6 +190,7 @@ RUN tar -zxvC /usr/src -f pecl-database-mysql-master.tar.gz \
 # composer
     && curl --retry-all-errors --retry-delay 2 --retry 99 -fSL https://mirrors.aliyun.com/composer/composer.phar -o /usr/src/composer.phar \
     && php /usr/src/composer.phar config -g repo.packagist composer https://mirrors.aliyun.com/composer/ \
+    && php /usr/src/composer.phar config -g process-timeout 3600 \
 #
 # clean apk build deps
     && apk del .build-deps
