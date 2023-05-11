@@ -7,12 +7,12 @@
 # https://github.com/alpinelinux/docker-alpine
 # https://pkgs.alpinelinux.org/
 
-FROM alpine:3.17
+FROM alpine:3.18
 
 LABEL Description="ActiveMQ Artemis Docker" Vendor="Demo Studio" Version="1.0.0"
 
 # set environment
-ENV ALPINE_VERSION="3.17" \
+ENV ALPINE_VERSION="3.18" \
     BASE_DIR="/home/artemis" \
     JAVA_HOME="/usr/lib/jvm/java-17-openjdk" \
     JAVA="/usr/lib/jvm/java-17-openjdk/bin/java" \

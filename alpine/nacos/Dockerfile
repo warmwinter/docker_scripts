@@ -8,14 +8,14 @@
 # https://github.com/alpinelinux/docker-alpine
 # https://pkgs.alpinelinux.org/
 
-FROM alpine:3.17
+FROM alpine:3.18
 
 LABEL Description="Nacos Docker" Vendor="Demo Studio" Version="1.0.0"
 
 # apk add mysql-client mariadb-connector-c
 
 # set environment
-ENV ALPINE_VERSION="3.17" \
+ENV ALPINE_VERSION="3.18" \
     MODE="cluster" \
     PREFER_HOST_MODE="ip"\
     BASE_DIR="/home/nacos" \
@@ -45,10 +45,10 @@ ENV SPRING_DATASOURCE_PLATFORM="mysql" \
 # telnet 
 # apk add busybox-extras
 
-ARG NACOS_VERSION=2.2.1
+ARG NACOS_VERSION=2.2.2
 ARG HOT_FIX_FLAG=""
 ARG LOCAL_MIRROR=""
-ARG ROCKSDB_VERSION=8.0.0
+ARG ROCKSDB_VERSION=8.1.1
 
 WORKDIR $BASE_DIR
 
