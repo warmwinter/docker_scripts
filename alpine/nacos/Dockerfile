@@ -22,9 +22,9 @@ ENV ALPINE_VERSION="3.18" \
     CLASSPATH=".:/home/nacos/conf:$CLASSPATH" \
     CLUSTER_CONF="/home/nacos/conf/cluster.conf" \
     FUNCTION_MODE="all" \
-    JAVA_HOME="/usr/lib/jvm/java-1.8-openjdk" \
+    JAVA_HOME="/usr/lib/jvm/java-17-openjdk" \
     NACOS_USER="nacos" \
-    JAVA="/usr/lib/jvm/java-1.8-openjdk/bin/java" \
+    JAVA="/usr/lib/jvm/java-17-openjdk/bin/java" \
     JVM_XMS="1g" \
     JVM_XMX="1g" \
     JVM_XMN="512m" \
@@ -45,7 +45,7 @@ ENV SPRING_DATASOURCE_PLATFORM="mysql" \
 # telnet 
 # apk add busybox-extras
 
-ARG NACOS_VERSION=2.2.2
+ARG NACOS_VERSION=2.2.3
 ARG HOT_FIX_FLAG=""
 ARG LOCAL_MIRROR=""
 ARG ROCKSDB_VERSION=8.1.1
