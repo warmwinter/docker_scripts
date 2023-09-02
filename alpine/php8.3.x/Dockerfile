@@ -1,11 +1,11 @@
 # PHP Version 8.1.x
 
 # https://hub.docker.com/_/php?tab=tags&page=1&name=fpm-alpine
-# docker pull php:8.1.0beta1-fpm-alpine3.14
+# docker pull php:8.3.0RC1-fpm-alpine3.18
 
-FROM php:8.1-fpm-alpine3.18
+FROM php:8.3.0RC1-fpm-alpine3.18
 
-LABEL Description="PHP v8.1.x Docker" Vendor="Demo Studio" Version="1.0.0"
+LABEL Description="PHP v8.3.x Docker" Vendor="Demo Studio" Version="1.0.0"
 
 # Some Enviroment
 ENV php_conf_d /usr/local/etc/php/conf.d/
@@ -159,14 +159,14 @@ RUN tar -zxvC /usr/src -f pecl-database-mysql-master.tar.gz \
 #
 # Install xdebug
     && cd /usr/src/xdebug-$XDEBUG_VER \
-    && phpize \
-    && ./configure --enable-xdebug \
-    && make -j$(getconf _NPROCESSORS_ONLN) \
-    && make install \
-    && echo "zend_extension=xdebug.so" > ${php_conf_d}xdebug.ini \
-    && echo "xdebug.mode=develop,debug" >> ${php_conf_d}xdebug.ini \
-    && echo "xdebug.discover_client_host = true" >> ${php_conf_d}xdebug.ini \
-    && echo "xdebug.idekey = \"PHPSTORM\"" >> ${php_conf_d}xdebug.ini \
+    # && phpize \
+    # && ./configure --enable-xdebug \
+    # && make -j$(getconf _NPROCESSORS_ONLN) \
+    # && make install \
+    # && echo "zend_extension=xdebug.so" > ${php_conf_d}xdebug.ini \
+    # && echo "xdebug.mode=develop,debug" >> ${php_conf_d}xdebug.ini \
+    # && echo "xdebug.discover_client_host = true" >> ${php_conf_d}xdebug.ini \
+    # && echo "xdebug.idekey = \"PHPSTORM\"" >> ${php_conf_d}xdebug.ini \
     && cd .. \
     && rm -rf /usr/src/xdebug-$XDEBUG_VER \
 #
