@@ -172,12 +172,12 @@ RUN tar -zxvC /usr/src -f pecl-database-mysql-master.tar.gz \
 #
 # Install swoole
     && cd /usr/src/swoole-$SWOOLE_VER \
-    && phpize \
-    && ./configure --enable-sockets --enable-openssl \
-        --enable-http2 --enable-swoole --enable-mysqlnd \
-    && make -j$(getconf _NPROCESSORS_ONLN) \
-    && make install \
-    && echo "extension=swoole.so" > ${php_conf_d}swoole.ini \
+    # && phpize \
+    # && ./configure --enable-sockets --enable-openssl \
+    #     --enable-http2 --enable-swoole --enable-mysqlnd \
+    # && make -j$(getconf _NPROCESSORS_ONLN) \
+    # && make install \
+    # && echo "extension=swoole.so" > ${php_conf_d}swoole.ini \
     && cd .. \
     && rm -rf /usr/src/swoole-$SWOOLE_VER \
 # Install pecl decimal
