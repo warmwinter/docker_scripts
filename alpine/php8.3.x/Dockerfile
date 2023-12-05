@@ -3,7 +3,7 @@
 # https://hub.docker.com/_/php?tab=tags&page=1&name=fpm-alpine
 # docker pull php:8.3.0RC1-fpm-alpine3.18
 
-FROM php:8.3.0RC6-fpm-alpine3.18
+FROM php:8.3.0-fpm-alpine3.18
 
 LABEL Description="PHP v8.3.x Docker" Vendor="Demo Studio" Version="1.0.0"
 
@@ -14,7 +14,7 @@ ENV ALPINE_VERSION 3.18
 ENV IGBINARY_VER 3.2.14
 ENV REDIS_VER 6.0.2
 ENV XDEBUG_VER 3.3.0alpha3
-ENV SWOOLE_VER 5.1.0
+ENV SWOOLE_VER 5.1.1
 ENV DECIMAL_VER 1.4.0
 
 ARG LOCAL_MIRROR=""
@@ -159,25 +159,25 @@ RUN tar -zxvC /usr/src -f pecl-database-mysql-master.tar.gz \
 #
 # Install xdebug
     && cd /usr/src/xdebug-$XDEBUG_VER \
-    # && phpize \
-    # && ./configure --enable-xdebug \
-    # && make -j$(getconf _NPROCESSORS_ONLN) \
-    # && make install \
-    # && echo "zend_extension=xdebug.so" > ${php_conf_d}xdebug.ini \
-    # && echo "xdebug.mode=develop,debug" >> ${php_conf_d}xdebug.ini \
-    # && echo "xdebug.discover_client_host = true" >> ${php_conf_d}xdebug.ini \
-    # && echo "xdebug.idekey = \"PHPSTORM\"" >> ${php_conf_d}xdebug.ini \
+    && phpize \
+    && ./configure --enable-xdebug \
+    && make -j$(getconf _NPROCESSORS_ONLN) \
+    && make install \
+    && echo "zend_extension=xdebug.so" > ${php_conf_d}xdebug.ini \
+    && echo "xdebug.mode=develop,debug" >> ${php_conf_d}xdebug.ini \
+    && echo "xdebug.discover_client_host = true" >> ${php_conf_d}xdebug.ini \
+    && echo "xdebug.idekey = \"PHPSTORM\"" >> ${php_conf_d}xdebug.ini \
     && cd .. \
     && rm -rf /usr/src/xdebug-$XDEBUG_VER \
 #
 # Install swoole
     && cd /usr/src/swoole-$SWOOLE_VER \
-    # && phpize \
-    # && ./configure --enable-sockets --enable-openssl \
-    #     --enable-http2 --enable-swoole --enable-mysqlnd \
-    # && make -j$(getconf _NPROCESSORS_ONLN) \
-    # && make install \
-    # && echo "extension=swoole.so" > ${php_conf_d}swoole.ini \
+    && phpize \
+    && ./configure --enable-sockets --enable-openssl \
+        --enable-http2 --enable-swoole --enable-mysqlnd \
+    && make -j$(getconf _NPROCESSORS_ONLN) \
+    && make install \
+    && echo "extension=swoole.so" > ${php_conf_d}swoole.ini \
     && cd .. \
     && rm -rf /usr/src/swoole-$SWOOLE_VER \
 # Install pecl decimal
