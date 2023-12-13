@@ -81,7 +81,7 @@ RUN set -xe \
 # https://github.com/facebook/rocksdb/blob/main/INSTALL.md
 # 
     && apk add --no-cache zlib-dev bzip2 bzip2-dev lz4-dev snappy-dev gflags-dev zstd-dev libc6-compat \
-    && ln -s /lib/libc.musl-x86_64.so.1 /lib/ld-linux-x86-64.so.2 \
+#    && ln -s /lib/libc.musl-x86_64.so.1 /lib/ld-linux-x86-64.so.2 \
 # https://github.com/facebook/rocksdb/archive/refs/tags/v6.22.1.tar.gz
     && if [ -z "$LOCAL_MIRROR" ]; then \
         wget -t 0 https://github.com/facebook/rocksdb/archive/refs/tags/v${ROCKSDB_VERSION}.tar.gz -O rocksdb-${ROCKSDB_VERSION}.tar.gz; \
