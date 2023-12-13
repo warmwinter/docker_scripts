@@ -7,15 +7,15 @@
 # https://github.com/alpinelinux/docker-alpine
 # https://pkgs.alpinelinux.org/
 
-FROM alpine:3.18
+FROM alpine:3.19
 
 LABEL Description="ActiveMQ Artemis Docker" Vendor="Demo Studio" Version="1.0.0"
 
 # set environment
-ENV ALPINE_VERSION="3.18" \
+ENV ALPINE_VERSION="3.19" \
     BASE_DIR="/home/artemis" \
-    JAVA_HOME="/usr/lib/jvm/java-17-openjdk" \
-    JAVA="/usr/lib/jvm/java-17-openjdk/bin/java" \
+    JAVA_HOME="/usr/lib/jvm/java-21-openjdk" \
+    JAVA="/usr/lib/jvm/java-21-openjdk/bin/java" \
     CURL_CMD="curl --retry-all-errors --retry-delay 2 --retry 99 -L " \
     TIME_ZONE="Asia/Shanghai"
 
@@ -50,7 +50,7 @@ RUN set -xe \
     && date \
 # 
     && apk upgrade \
-    && apk add --no-cache bash openjdk17 curl \
+    && apk add --no-cache bash openjdk21 curl \
     && echo $LOCAL_MIRROR \
     && echo $MODE \
     && pwd  \

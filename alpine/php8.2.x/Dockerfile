@@ -3,14 +3,14 @@
 # https://hub.docker.com/_/php?tab=tags&page=1&name=fpm-alpine
 # docker pull php:8.1.0beta1-fpm-alpine3.14
 
-FROM php:8.2-fpm-alpine3.18
+FROM php:8.2-fpm-alpine3.19
 
 LABEL Description="PHP v8.2.x Docker" Vendor="Demo Studio" Version="1.0.0"
 
 # Some Enviroment
 ENV PHP_CONF_D /usr/local/etc/php/conf.d/
 
-ENV ALPINE_VERSION 3.18
+ENV ALPINE_VERSION 3.19
 ENV IGBINARY_VER 3.2.15
 ENV REDIS_VER 6.0.2
 ENV XDEBUG_VER 3.3.0

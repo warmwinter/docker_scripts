@@ -8,23 +8,23 @@
 # https://github.com/alpinelinux/docker-alpine
 # https://pkgs.alpinelinux.org/
 
-FROM alpine:3.18
+FROM alpine:3.19
 
 LABEL Description="Nacos Docker" Vendor="Demo Studio" Version="1.0.0"
 
 # apk add mysql-client mariadb-connector-c
 
 # set environment
-ENV ALPINE_VERSION="3.18" \
+ENV ALPINE_VERSION="3.19" \
     MODE="cluster" \
     PREFER_HOST_MODE="ip"\
     BASE_DIR="/home/nacos" \
     CLASSPATH=".:/home/nacos/conf:$CLASSPATH" \
     CLUSTER_CONF="/home/nacos/conf/cluster.conf" \
     FUNCTION_MODE="all" \
-    JAVA_HOME="/usr/lib/jvm/java-17-openjdk" \
+    JAVA_HOME="/usr/lib/jvm/java-21-openjdk" \
     NACOS_USER="nacos" \
-    JAVA="/usr/lib/jvm/java-17-openjdk/bin/java" \
+    JAVA="/usr/lib/jvm/java-21-openjdk/bin/java" \
     JVM_XMS="1g" \
     JVM_XMX="1g" \
     JVM_XMN="512m" \
@@ -45,10 +45,10 @@ ENV SPRING_DATASOURCE_PLATFORM="mysql" \
 # telnet 
 # apk add busybox-extras
 
-ARG NACOS_VERSION=2.2.3
+ARG NACOS_VERSION=2.3.0
 ARG HOT_FIX_FLAG=""
 ARG LOCAL_MIRROR=""
-ARG ROCKSDB_VERSION=8.8.1
+ARG ROCKSDB_VERSION=8.9.1
 
 WORKDIR $BASE_DIR
 
@@ -71,7 +71,7 @@ RUN set -xe \
     && date \
 # 
     && apk upgrade \
-    && apk add --no-cache bash openjdk17 wget iputils netcat-openbsd vim libcurl \
+    && apk add --no-cache bash openjdk21 wget iputils netcat-openbsd vim libcurl \
     && echo $LOCAL_MIRROR \
     && echo $MODE \
     && pwd \
