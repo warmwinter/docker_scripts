@@ -11,9 +11,9 @@ LABEL Description="PHP v8.1.x Docker" Vendor="Demo Studio" Version="1.0.0"
 ENV php_conf_d /usr/local/etc/php/conf.d/
 
 ENV ALPINE_VERSION 3.18
-ENV IGBINARY_VER 3.2.14
+ENV IGBINARY_VER 3.2.15
 ENV REDIS_VER 6.0.2
-ENV XDEBUG_VER 3.3.0alpha3
+ENV XDEBUG_VER 3.3.0
 ENV SWOOLE_VER 5.1.1
 ENV DECIMAL_VER 1.4.0
 
