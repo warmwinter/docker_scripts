@@ -65,13 +65,14 @@ RUN set -xe \
     # && echo 'nameserver 223.6.6.6' >> /etc/resolv.conf \
 #
 # Config the System, inclue timezone
-    && apk add --no-cache --virtual .system-deps tzdata gcc make g++ perl linux-headers binutils \
+    && apk add --no-cache --virtual .system-deps tzdata \
+    # gcc make g++ perl linux-headers binutils \
     && cp /usr/share/zoneinfo/$TIME_ZONE /etc/localtime \
     && echo $TIME_ZONE > /etc/timezone \
     && date \
 # 
     && apk upgrade \
-    && apk add --no-cache bash openjdk21 wget iputils netcat-openbsd vim libcurl \
+    && apk add --no-cache bash openjdk21 wget iputils netcat-openbsd vim libcurl rocksdb \
     && echo $LOCAL_MIRROR \
     && echo $MODE \
     && pwd \
@@ -80,21 +81,21 @@ RUN set -xe \
 # install rocksdb
 # https://github.com/facebook/rocksdb/blob/main/INSTALL.md
 # 
-    && apk add --no-cache zlib-dev bzip2 bzip2-dev lz4-dev snappy-dev gflags-dev zstd-dev libc6-compat \
+    # && apk add --no-cache zlib-dev bzip2 bzip2-dev lz4-dev snappy-dev gflags-dev zstd-dev libc6-compat \
 #    && ln -s /lib/libc.musl-x86_64.so.1 /lib/ld-linux-x86-64.so.2 \
 # https://github.com/facebook/rocksdb/archive/refs/tags/v6.22.1.tar.gz
-    && if [ -z "$LOCAL_MIRROR" ]; then \
-        wget -t 0 https://github.com/facebook/rocksdb/archive/refs/tags/v${ROCKSDB_VERSION}.tar.gz -O rocksdb-${ROCKSDB_VERSION}.tar.gz; \
-    else \
-        wget -t 0 https://mirrors.inproc.top/rocksdb-${ROCKSDB_VERSION}.tar.gz; \
-    fi \
-    && tar zxf rocksdb-${ROCKSDB_VERSION}.tar.gz \
-    && cd rocksdb-${ROCKSDB_VERSION} \
-    && make shared_lib \
-    && cp librocksdb.so.${ROCKSDB_VERSION} /usr/lib/librocksdb.so \
-    && strip /usr/lib/librocksdb.so \
-    && cd .. \
-    && rm -rf rocksdb-* \
+    # && if [ -z "$LOCAL_MIRROR" ]; then \
+    #     wget -t 0 https://github.com/facebook/rocksdb/archive/refs/tags/v${ROCKSDB_VERSION}.tar.gz -O rocksdb-${ROCKSDB_VERSION}.tar.gz; \
+    # else \
+    #     wget -t 0 https://mirrors.inproc.top/rocksdb-${ROCKSDB_VERSION}.tar.gz; \
+    # fi \
+    # && tar zxf rocksdb-${ROCKSDB_VERSION}.tar.gz \
+    # && cd rocksdb-${ROCKSDB_VERSION} \
+    # && make shared_lib \
+    # && cp librocksdb.so.${ROCKSDB_VERSION} /usr/lib/librocksdb.so \
+    # && strip /usr/lib/librocksdb.so \
+    # && cd .. \
+    # && rm -rf rocksdb-* \
 #
 # clean packages
     && apk del .system-deps
