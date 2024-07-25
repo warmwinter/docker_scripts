@@ -1,21 +1,21 @@
 # PHP Version 8.1.x
 
-# https://hub.docker.com/_/php?tab=tags&page=1&name=fpm-alpine
+# https://hub.docker.com/_/php/tags?page=&page_size=&ordering=&name=fpm-alpine
 # docker pull php:8.3.0RC1-fpm-alpine3.18
 
-FROM php:8.3.0-fpm-alpine3.19
+FROM php:8.3.9-fpm-alpine3.20
 
 LABEL Description="PHP v8.3.x Docker" Vendor="Demo Studio" Version="1.0.0"
 
 # Some Enviroment
 ENV php_conf_d /usr/local/etc/php/conf.d/
 
-ENV ALPINE_VERSION 3.19
+ENV ALPINE_VERSION 3.20
 ENV IGBINARY_VER 3.2.15
 ENV REDIS_VER 6.0.2
-ENV XDEBUG_VER 3.3.1
-ENV SWOOLE_VER 5.1.1
-ENV DECIMAL_VER 1.4.0
+ENV XDEBUG_VER 3.3.2
+ENV SWOOLE_VER 5.1.3
+ENV DECIMAL_VER 1.5.0
 
 ARG LOCAL_MIRROR=""
 
@@ -99,9 +99,11 @@ RUN set -xe \
 # 
 # Install mysql
 RUN if [ -z "$LOCAL_MIRROR" ]; then \
+        echo "Run github" \
         curl --retry-all-errors --retry-delay 2 --retry 99 -fSL https://github.com/php/pecl-database-mysql/archive/refs/heads/master.tar.gz -o pecl-database-mysql-master.tar.gz; \
     else \
-        curl --retry-all-errors --retry-delay 2 --retry 99 -fSL https://mirrors.inproc.top/pecl-database-mysql-master.tar.gz -o pecl-database-mysql-master.tar.gz; \
+    echo "Run local mirror" \
+        curl --retry-all-errors --retry-delay 2 --retry 99 -fSL https://mirrors.n30.ink/pecl-database-mysql-master.tar.gz -o pecl-database-mysql-master.tar.gz; \
     fi
 RUN tar -zxvC /usr/src -f pecl-database-mysql-master.tar.gz \
     && rm -f pecl-database-mysql-master.tar.gz \

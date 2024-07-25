@@ -8,14 +8,14 @@
 # https://github.com/alpinelinux/docker-alpine
 # https://pkgs.alpinelinux.org/
 
-FROM alpine:3.19
+FROM alpine:3.20
 
 LABEL Description="Nacos Docker" Vendor="Demo Studio" Version="1.0.0"
 
 # apk add mysql-client mariadb-connector-c
 
 # set environment
-ENV ALPINE_VERSION="3.19" \
+ENV ALPINE_VERSION="3.20" \
     MODE="cluster" \
     PREFER_HOST_MODE="ip"\
     BASE_DIR="/home/nacos" \
@@ -45,10 +45,10 @@ ENV SPRING_DATASOURCE_PLATFORM="mysql" \
 # telnet 
 # apk add busybox-extras
 
-ARG NACOS_VERSION=2.3.0
+ARG NACOS_VERSION=2.4.0.1
 ARG HOT_FIX_FLAG=""
 ARG LOCAL_MIRROR=""
-ARG ROCKSDB_VERSION=8.10.0
+ARG ROCKSDB_VERSION=9.4.0
 
 WORKDIR $BASE_DIR
 
@@ -87,7 +87,7 @@ RUN set -xe \
     # && if [ -z "$LOCAL_MIRROR" ]; then \
     #     wget -t 0 https://github.com/facebook/rocksdb/archive/refs/tags/v${ROCKSDB_VERSION}.tar.gz -O rocksdb-${ROCKSDB_VERSION}.tar.gz; \
     # else \
-    #     wget -t 0 https://mirrors.inproc.top/rocksdb-${ROCKSDB_VERSION}.tar.gz; \
+    #     wget -t 0 https://mirrors.n30.ink/rocksdb-${ROCKSDB_VERSION}.tar.gz; \
     # fi \
     # && tar zxf rocksdb-${ROCKSDB_VERSION}.tar.gz \
     # && cd rocksdb-${ROCKSDB_VERSION} \
@@ -103,7 +103,7 @@ RUN set -xe \
 RUN if [ -z "$LOCAL_MIRROR" ]; then \
         wget -t 0 https://github.com/alibaba/nacos/releases/download/${NACOS_VERSION}${HOT_FIX_FLAG}/nacos-server-${NACOS_VERSION}.tar.gz -P /home; \
     else \
-        wget -t 0 https://mirrors.inproc.top/nacos-server-${NACOS_VERSION}.tar.gz -P /home; \
+        wget -t 0 https://mirrors.n30.ink/nacos-server-${NACOS_VERSION}.tar.gz -P /home; \
     fi
 RUN tar -xzvf /home/nacos-server-${NACOS_VERSION}.tar.gz -C /home \
     && rm -rf /home/nacos-server-${NACOS_VERSION}.tar.gz /home/nacos/bin/* /home/nacos/conf/*.properties /home/nacos/conf/*.example /home/nacos/conf/nacos-mysql.sql

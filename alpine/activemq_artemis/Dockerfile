@@ -7,12 +7,12 @@
 # https://github.com/alpinelinux/docker-alpine
 # https://pkgs.alpinelinux.org/
 
-FROM alpine:3.19
+FROM alpine:3.20
 
 LABEL Description="ActiveMQ Artemis Docker" Vendor="Demo Studio" Version="1.0.0"
 
 # set environment
-ENV ALPINE_VERSION="3.19" \
+ENV ALPINE_VERSION="3.20" \
     BASE_DIR="/home/artemis" \
     JAVA_HOME="/usr/lib/jvm/java-21-openjdk" \
     JAVA="/usr/lib/jvm/java-21-openjdk/bin/java" \
@@ -22,7 +22,7 @@ ENV ALPINE_VERSION="3.19" \
 ARG LOCAL_MIRROR=""
 
 # Broker info
-ENV ARTEMIS_VERSION=2.31.2 \
+ENV ARTEMIS_VERSION=2.35.0 \
     ARTEMIS_HOME="${BASE_DIR}/artemis" \
     BROKER_HOME="${BASE_DIR}/brokers" \
     BROKER_DIR="mainBroker" \
@@ -67,7 +67,7 @@ RUN set -xe; \
 #        ${CURL_CMD} "https://www.apache.org/dyn/closer.cgi?filename=activemq/activemq-artemis/${ARTEMIS_VERSION}/apache-artemis-${ARTEMIS_VERSION}-bin.tar.gz&action=download" -o artemis.tar.gz; \
          ${CURL_CMD}} https://dlcdn.apache.org/activemq/activemq-artemis/${ARTEMIS_VERSION}/apache-artemis-${ARTEMIS_VERSION}-bin.tar.gz -o artemis.tar.gz; \
     else \
-        ${CURL_CMD} "https://mirrors.inproc.top/apache-artemis-${ARTEMIS_VERSION}-bin.tar.gz" -o artemis.tar.gz; \
+        ${CURL_CMD} "https://mirrors.n30.ink/apache-artemis-${ARTEMIS_VERSION}-bin.tar.gz" -o artemis.tar.gz; \
     fi; \
     \
     tar --strip-components=1 -C ${ARTEMIS_HOME} -zxf artemis.tar.gz; \
